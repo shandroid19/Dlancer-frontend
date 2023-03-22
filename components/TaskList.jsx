@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 const TaskCard = ({task})=>{
+
     return <Link style={{textDecoration:"none"}} href={`/tasks/${task.id}`}>
         <div  className="card text-dark my-5">
         <div className="card-body">

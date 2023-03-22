@@ -1,0 +1,10 @@
+.cardlink{
+    text-decoration: none;
+    color: black;
+}
+
+.cardimg{
+    border-radius: 50%;
+    object-fit: contain;
+    width: 100%;
+}

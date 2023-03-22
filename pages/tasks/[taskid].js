@@ -3,7 +3,10 @@ import { useRef } from "react";
 import { useMoralis,useWeb3Contract } from "react-moralis";
 import { abi,addresses } from "@/constants";
 import axios from "axios";
-export default function SubmitWork({taskid}){
+import { useRouter } from "next/router";
+export default function SubmitWork(){
+    const router= useRouter();
+    const taskid = router.query;
     const task = {
         name:"Todo List",
         description:"Develop a todo list which has the following features",
@@ -16,27 +19,8 @@ export default function SubmitWork({taskid}){
         ]
     }
     const code = useRef(" ");
-    var options;
-    if(code.current.value){
-    options = {
-        method: 'POST',
-        url: 'https://judge0-ce.p.rapidapi.com/submissions',
-        params: {base64_encoded: 'true', fields: '*'},
-        headers: {
-          'content-type': 'application/json',
-          'Content-Type': 'application/json',
-          'X-RapidAPI-Key': '4095c8e687msh4ea109541a9080fp1b5a32jsn219ffab71803',
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-        },
-        data: '{"language_id":52,"source_code":"'+Buffer.from(code.current.value).toString('base64') +'","stdin":"SnVkZ2Uw","  "expected_output":"'+Buffer.from("hello").toString('base64')+'" }'
-      };
-    }
       const submit = ()=>{
-      axios.request(options).then(function (response) {
-          console.log(response.data);
-      }).catch(function (error) {
-          console.error(error);
-      });
+      console.log("submitted")
     }
       
 
