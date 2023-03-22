@@ -7,7 +7,7 @@ export default function CreateTask(){
     const description = useRef("");
     const testCases = useRef([]);
     const developer = useRef("");
-    const reward = useRef(0);
+    const reward = useRef("");
     const timelimit = useRef(0);
     const {chainId:chainIdhex} = useMoralis();
     const chainId = parseInt(chainIdhex);
@@ -17,9 +17,11 @@ export default function CreateTask(){
             abi:abi,
             contractAddress:contractAddress,
             functionName:"activateTask",
-            params:{_reward:ethers.utils.parseEther(reward.current.toString())},
+            
+            params:{_reward: ethers.utils.parseEther(reward.current?.value || "0")},
             chainId:chainId,
-            msgValue:ethers.utils.parseEther(reward.current.toString())
+            
+            msgValue:ethers.utils.parseEther(reward.current?.value || "0")
         }
     )
 
@@ -72,7 +74,7 @@ export default function CreateTask(){
                         <div className="col-sm-4"><input ref={timelimit} type="number" placeholder="in hrs" className="form-control"/></div>
                         
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Reward</label>
-                        <div className="col-sm-4"><input ref={reward} type="number" placeholder="in ETH" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={reward} type="text" placeholder="in ETH" className="form-control"/></div>
                     </div>
                     <div className="form-group row my-3">
                     <label htmlFor="developer" ref={developer} className="col-sm-2 col-form-label">Developer</label>
