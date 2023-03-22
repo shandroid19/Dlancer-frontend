@@ -1,8 +1,8 @@
 import Link from "next/link"
 
-const TaskCard = ({task})=>{
-
-    return <Link style={{textDecoration:"none"}} href={`/tasks/${task.id}`}>
+const TaskCard = ({task,projectid})=>{
+    console.log(projectid)
+    return <Link style={{textDecoration:"none"}} href={`/projects/${projectid}/${task.id}`}>
         <div  className="card text-dark my-5">
         <div className="card-body">
             <div className="container ">
@@ -32,9 +32,9 @@ const TaskCard = ({task})=>{
     </Link>
 }
 
-export default function TaskList({data}){
-    const listed = data.map((task,key)=>{
-        return <TaskCard key={key} task ={task}/>
+export default function TaskList({task,projectid}){
+    const listed = task.map((task,key)=>{
+        return <TaskCard key={key} projectid={projectid} task={task}/>
     })
     return <div className="container m-3">{listed}</div>
 }

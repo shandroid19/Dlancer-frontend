@@ -60,7 +60,7 @@ export default function CreateTask(){
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Description</label>
                         <div className="col-sm-10">
-                            <textarea type="text" useRef={description} rows={4} className="form-control" />
+                            <textarea type="text" ref={description} rows={4} className="form-control" />
                         </div>
                     </div>
                     <div className="form-group row my-3">
@@ -69,13 +69,13 @@ export default function CreateTask(){
                     </div>
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
-                        <div className="col-sm-4"><input useRef={timelimit} type="number" placeholder="in hrs" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={timelimit} type="number" placeholder="in hrs" className="form-control"/></div>
                         
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Reward</label>
-                        <div className="col-sm-4"><input useRef={reward} type="number" placeholder="in ETH" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={reward} type="number" placeholder="in ETH" className="form-control"/></div>
                     </div>
                     <div className="form-group row my-3">
-                    <label htmlFor="developer" useRef={developer} className="col-sm-2 col-form-label">Developer</label>
+                    <label htmlFor="developer" ref={developer} className="col-sm-2 col-form-label">Developer</label>
                         <div className="col-sm-4">
                         <select className="form-control my-1 mr-sm-2" >
                             <option defaultValue="0xFABB0ac9d68B0B445fB7357272Ff202C5651694a">Admin</option>
