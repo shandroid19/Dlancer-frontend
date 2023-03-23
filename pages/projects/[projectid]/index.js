@@ -1,5 +1,6 @@
 import TaskList from "@/components/TaskList"
 import { useRouter } from "next/router"
+import Header from "@/components/Header";
 export default function Project(){
     const router = useRouter();
     const project = {title:"todo app",description:"This is a todo app", collaborators:3,
@@ -10,18 +11,15 @@ export default function Project(){
         ]
     }
 
-    return <div className="container p-5">
+    return <><Header></Header>
+    <div className="container p-5">
     <div className="card text-dark my-5">
+    <div className="card-header display-6 text-center">
+        {project.title}
+    </div>
     <div className="card-body">
         <div className="container">
-            <div className="row my-3">
-                <div className="col-sm-3 ">
-                    <b>Title:</b>
-                </div>
-                <div className="col-sm-9 ">
-                    {project.title}
-                </div>
-            </div>
+     
             <div className="row my-3">
                 <div className="col-sm-3 ">
                     <b>Description:</b>
@@ -50,4 +48,5 @@ export default function Project(){
     </div>
 </div>
 </div>
+</>
 }

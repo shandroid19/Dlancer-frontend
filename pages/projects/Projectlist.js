@@ -29,7 +29,7 @@ const ProjectCard = ({project})=>{
                                     Status:
                                 </div>
                                 <div className="col-sm-6">
-                                    {project.status}
+                                    {project.status?<span className="badge bg-primary">Open</span>:<span className="badge bg-primary">Closed</span>}
                                 </div>
                             </div>
                     </div>

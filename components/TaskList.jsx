@@ -36,5 +36,18 @@ export default function TaskList({task,projectid}){
     const listed = task.map((task,key)=>{
         return <TaskCard key={key} projectid={projectid} task={task}/>
     })
-    return <div className="container m-3">{listed}</div>
+    return <div className="container m-3">
+        {listed}
+        <div className="row d-flex justify-content-center">
+            <div className="col-sm-3">
+                <Link href={`/projects/${projectid}/addtask`}>
+                <div className="card">
+                    <div className="card-body text-center bg-primary text-white">
+                        Add task
+                    </div>
+                </div>
+                </Link>
+            </div>
+        </div>
+        </div>
 }

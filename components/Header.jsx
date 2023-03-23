@@ -9,12 +9,12 @@ export default function Header(){
   
     <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
       <ul className="navbar-nav">
-        <li className="nav-item active">
+        {/* <li className="nav-item active">
           <Link className="nav-link text-light" href={'/createtask'}>Create </Link>
         </li>
         <li className="nav-item">
           <Link className="nav-link text-light" href={'/tasks'}>Tasks </Link>
-        </li>
+        </li> */}
         <li className="nav-item">
           <Link className="nav-link text-light" href={'/users'}>Users </Link>
         </li>

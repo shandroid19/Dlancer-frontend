@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import {useWeb3Contract,useMoralis} from 'react-moralis'
-import {abi,addresses} from '../constants/index'
+import { abi,addresses } from "../../../../constants/index";
 import { ethers } from "ethers";
-export default function CreateTask(){
+export default function AddTask(){
     const taskname = useRef("");
     const description = useRef("");
     const testCases = useRef([]);
