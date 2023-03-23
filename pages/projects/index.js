@@ -1,5 +1,5 @@
 import Header from "@/components/Header"
-import TaskList from "@/components/TaskList"
+import TaskList from "@/pages/projects/[projectid]/TaskList"
 import ProjectList from "./Projectlist"
 
 const data = [

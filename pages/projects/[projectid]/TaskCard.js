@@ -1,9 +1,8 @@
 import Link from "next/link"
 
-const TaskCard = ({task,projectid})=>{
-    console.log(projectid)
-    return <Link style={{textDecoration:"none"}} href={`/projects/${projectid}/${task.id}`}>
-        <div  className="card text-dark my-5">
+export default function TaskCard({task,projectid,usermode}){
+    return <Link style={{textDecoration:"none"}} href={usermode==1?`/projects/${projectid}/${task.id}`:'#'}>
+        <div  className="card shadow text-dark my-3">
         <div className="card-body">
             <div className="container ">
                 <div className="row">
@@ -11,7 +10,7 @@ const TaskCard = ({task,projectid})=>{
                         <b>Task Name:</b>
                     </div>
                     <div className="col-sm-6 col-md-2">
-                        {task.name}
+                        {task.title}
                     </div>
                     <div className="col-sm-6 col-md-2">
                         <b>Remaining time:</b>
@@ -30,24 +29,4 @@ const TaskCard = ({task,projectid})=>{
         </div>
     </div>
     </Link>
-}
-
-export default function TaskList({task,projectid}){
-    const listed = task.map((task,key)=>{
-        return <TaskCard key={key} projectid={projectid} task={task}/>
-    })
-    return <div className="container m-3">
-        {listed}
-        <div className="row d-flex justify-content-center">
-            <div className="col-sm-3">
-                <Link href={`/projects/${projectid}/addtask`}>
-                <div className="card">
-                    <div className="card-body text-center bg-primary text-white">
-                        Add task
-                    </div>
-                </div>
-                </Link>
-            </div>
-        </div>
-        </div>
 }

@@ -47,9 +47,10 @@ export default function AddTask(){
 
 
     return (
+        <div className="container p-5">
         <div className="card">
             <div className="card-header">
-                <span className="card-title">Create a Task</span>
+                <div className="display-6 text-center">Create a Task</div>
             </div>
             <div className="card-body">
                 <div className="container">
@@ -97,6 +98,7 @@ export default function AddTask(){
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }

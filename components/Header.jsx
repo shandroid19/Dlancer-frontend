@@ -11,10 +11,10 @@ export default function Header(){
       <ul className="navbar-nav">
         {/* <li className="nav-item active">
           <Link className="nav-link text-light" href={'/createtask'}>Create </Link>
-        </li>
+        </li>*/}
         <li className="nav-item">
-          <Link className="nav-link text-light" href={'/tasks'}>Tasks </Link>
-        </li> */}
+          <Link className="nav-link text-light" href={'/search'}>Search </Link>
+        </li> 
         <li className="nav-item">
           <Link className="nav-link text-light" href={'/users'}>Users </Link>
         </li>

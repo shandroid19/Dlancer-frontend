@@ -1,5 +1,5 @@
 import Header from "@/components/Header"
-import TaskList from "@/components/TaskList"
+import TaskList from "@/pages/projects/[projectid]/TaskList"
 
 const data = [
     {id:1,name:"todo",description:"develop a todo app",testcases:"testcases set 1",reward:5,deadline:8},
