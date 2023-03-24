@@ -9,16 +9,13 @@ export default function Header(){
   
     <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
       <ul className="navbar-nav">
-        {/* <li className="nav-item active">
-          <Link className="nav-link text-light" href={'/createtask'}>Create </Link>
-        </li>*/}
-        <li className="nav-item">
+        <li className="nav-item ml-5">
           <Link className="nav-link text-light" href={'/search'}>Search </Link>
         </li> 
-        <li className="nav-item">
+        <li className="nav-item ml-5">
           <Link className="nav-link text-light" href={'/users'}>Users </Link>
         </li>
-        <li className="nav-item">
+        <li className="nav-item ml-5">
           <Link className="nav-link text-light" href={'/projects'}>Projects</Link>
         </li>
       </ul>
