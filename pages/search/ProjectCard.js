@@ -34,8 +34,8 @@ export default function ProjectCard({project}){
                                     <b>Skills:</b>
                                 </div>
                                 <div className="col-sm-6">
-                                    {project.skills.map((skill)=>{
-                                        return <span className="badge bg-secondary">{skill}</span>
+                                    {project.skills.map((skill,key)=>{
+                                        return <span key={key} className="badge bg-secondary">{skill}</span>
                                     })}
                                 </div>
                             </div>

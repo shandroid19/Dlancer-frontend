@@ -1,5 +1,7 @@
 import Header from '@/components/Header';
 import { useRouter } from 'next/router'
+import { useRef } from 'react';
+import { useMoralis } from 'react-moralis';
 import styles from '../../styles/Users.module.css'
 import Certificate from './Certificate';
 import Project from './Project';
@@ -14,7 +16,7 @@ export default function Profile(){
     tasks:"5/6",
     email:"employee@gmail.com"
 };
-
+const inviteproject = useRef();
 const projects = [
     {
         title:"brain tumor",
@@ -41,6 +43,10 @@ const certificates = [
     {title:"advanced data structues with java",org:"coursera",link:"link here",verified:1},
 ];
 
+const {account} = useMoralis();
+
+const accountprojects = [{id:1,title:"Todo app"},{id:2,title:"Self balancing robot"},{id:3,title:"gyroscope"}];
+
 const projectlist = projects.map((project,key)=>{
     return <div className='row my-3'><Project key={key} tasks={project.tasks} title={project.title} status={project.status}/></div>
 })
@@ -48,6 +54,10 @@ const projectlist = projects.map((project,key)=>{
 const certificatelist = certificates.map((cert,key)=>{
     return <div className='row my-3'><Certificate key={key} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/></div>
 })
+
+const invite = ()=>{
+    console.log("invite for project id",inviteproject.current.value,"sent to user",account)
+}
 
     return<>
     <Header/>
@@ -110,12 +120,56 @@ const certificatelist = certificates.map((cert,key)=>{
                                     })}
                                     </div>
                                 </div>
+
+                                    <div className="btn shadow bg-primary " data-toggle="modal" data-target="#projectInviteModal">
+                                        <div className="card-body text-center text-white">
+                                        Invite for collaboration
+                                        </div>
+                                    </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
     </div>
+
+    {/* MODAL STARTS HERE */}
+    <div className="modal fade" id="projectInviteModal" tabIndex="-1" role="dialog" aria-labelledby="projectInviteModal" aria-hidden="true">
+    <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" > Collaboration Invite</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div className="modal-body">
+        <div className="container">
+            <div className='row d-flex justify-content-center'>
+                <div className='col-sm-3 col-md-2 d-flex align-items-center'>
+                    <b>Project:</b>
+                </div>
+                <div className='col-sm-9 col-md-10'>
+                    <select ref = {inviteproject} className="form-control my-1 mr-sm-2" >
+                        {accountprojects.map((item,key)=>{
+                            return <option key={key} value={item.id}>{item.title}</option>
+                        })}
+                    </select> 
+                </div>
+            </div>
+        </div>
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-success" onClick={invite}>Invite</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    {/* MODAL ENDS HERE */}
+
+
     <div className='container p-5 bg-light rounded'>
         <div className='row d-flex justify-content-center'>
             <div className='col-md-6 d-flex justify-content-center'>

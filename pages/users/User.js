@@ -34,6 +34,8 @@ export default function User({id,username,tasks,skills,image}){
                                 </div>
                             </div>
                         </div>
+
+                    
                     </div>
                 </div>
             </div>
