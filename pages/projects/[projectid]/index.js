@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useMoralis } from "react-moralis";
 export default function Project(){
     const router = useRouter();
-    const [usermode,setusermode] = useState(1);
+    const [usermode,setusermode] = useState(2);
     //0: user - cannot view tasks and can request to collaborate to the project
     //1: collaborator - can view the tasks he is assigned to
     //2: owner - can view the all tasks but cannot open them. Can also add tasks

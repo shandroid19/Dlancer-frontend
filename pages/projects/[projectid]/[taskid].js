@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import { useRef } from "react";
 import { useMoralis,useWeb3Contract } from "react-moralis";
 import { abi,addresses } from "@/constants";
-import axios from "axios";
 import { useRouter } from "next/router";
 export default function SubmitWork(){
     const router= useRouter();

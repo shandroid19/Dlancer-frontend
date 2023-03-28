@@ -32,7 +32,7 @@ export default function Certificate({title,org,verified,link,id}){
                 <div className="row d-flex ">
                     <div className="col-3 col-sm-2">
                         {verified?<span className="badge bg-success">Verified</span>:
-                        (id.toLowerCase()==account?.toLowerCase()?<span data-toggle="modal" data-target="#certificateModal" className="badge bg-primary">Request for verification</span>:<span className="badge bg-danger">Unverified</span>)}
+                        (id.toLowerCase()==account?.toLowerCase()?<span data-toggle="modal" data-target="#certificateModal" className="badge bg-secondary">Request for verification</span>:<span className="badge bg-danger">Unverified</span>)}
                     </div>
                 </div>
             </div>

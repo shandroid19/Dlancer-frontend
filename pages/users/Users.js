@@ -5,8 +5,8 @@ export default function Users(){
     const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
     const data = [
         {username:"employee",id:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",skills:["React.js","Python","Tensorflow"],tasks:"5/9",image:image},
-        {username:"shandroid",id:"0xFABB0ac9d68B0B445fB7357272Ff202C5651694a",skills:["React.js","Python","Tensorflow"],tasks:"5/9",image:image},
-        {username:"owner",id:"0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",skills:["React.js","Python","Tensorflow"],tasks:"5/9",image:image}
+        {username:"shandroid",id:"0xFABB0ac9d68B0B445fB7357272Ff202C5651694a",skills:["ethers","flutter","linux"],tasks:"5/9",image:image},
+        {username:"owner",id:"0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",skills:["SQL","django","angular"],tasks:"5/9",image:image}
     ];
     const [filterText, setFilterText] = useState("");
 
