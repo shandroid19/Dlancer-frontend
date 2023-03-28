@@ -1,7 +1,7 @@
 import Link from "next/link"
 import "../../styles/Projects.module.css"
 const ProjectCard = ({project})=>{
-    return <div className="col-md-4"><Link href={`/projects/${project.id}`}>
+    return <div className="col-md-4 my-4"><Link href={`/projects/${project.id}`}>
         <div className="card">
             <div className="card-body">
                 <div className="container">
@@ -45,5 +45,15 @@ export default function ProjectList({data}){
     const listed = data.map((project,key)=>{
         return <ProjectCard key={key} project ={project}/>
     })
-    return <div className="row d-flex justify-content-center">{listed}</div>
+    return <div className="row d-flex justify-content-center">{listed}
+    <div className="col-md-4 my-4">
+        <Link href={`/projects/create`}>
+        <div className="card">
+            <div className="card-body text-light bg-primary text-center">
+                Add project
+            </div>
+        </div>
+        </Link>
+    </div>
+    </div>
 }

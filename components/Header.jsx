@@ -18,6 +18,9 @@ export default function Header(){
         <li className="nav-item ml-5">
           <Link className="nav-link text-light" href={'/projects'}>Projects</Link>
         </li>
+        <li className="nav-item ml-5">
+          <Link className="nav-link text-light" href={'/requests'}>Requests</Link>
+        </li>
       </ul>
       <div >
         <ConnectButton/>
