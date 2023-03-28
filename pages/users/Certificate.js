@@ -1,5 +1,8 @@
-export default function Certificate({title,org,verified,link}){
-    return <div className="card">
+import { useMoralis } from "react-moralis"
+
+export default function Certificate({title,org,verified,link,id}){
+    const {account} = useMoralis();
+    return <><div className="card">
         <div className="card-body">
             <div className="container">
                 <div className="row">
@@ -26,12 +29,48 @@ export default function Certificate({title,org,verified,link}){
                         {link}
                     </div>
                 </div>
-                <div className="row d-flex flex-row-reverse">
+                <div className="row d-flex ">
                     <div className="col-3 col-sm-2">
-                        {verified?<span className="badge bg-success">Verified</span>:<span className="badge bg-danger">Unverified</span>}
+                        {verified?<span className="badge bg-success">Verified</span>:
+                        (id.toLowerCase()==account?.toLowerCase()?<span data-toggle="modal" data-target="#certificateModal" className="badge bg-primary">Request for verification</span>:<span className="badge bg-danger">Unverified</span>)}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+     {/* MODAL STARTS HERE */}
+     <div className="modal fade" id="certificateModal" tabIndex="-1" role="dialog" aria-labelledby="certificateModal" aria-hidden="true">
+    <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" > Request for verification</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div className="modal-body">
+        <div className="container">
+            <div className='row d-flex justify-content-center'>
+                <div className='col-sm-3 col-md-2 d-flex align-items-center'>
+                    <b>authority email:</b>
+                </div>
+                <div className='col-sm-9 col-md-10'>
+                    <input type={'email'} className="form-control">
+
+                    </input>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-success" >Request</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    {/* MODAL ENDS HERE */}
+    </>
 }
