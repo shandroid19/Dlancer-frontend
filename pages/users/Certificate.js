@@ -1,6 +1,6 @@
 import { useMoralis } from "react-moralis"
 
-export default function Certificate({title,org,verified,link,id}){
+export default function Certificate({title,org,link,id}){
     const {account} = useMoralis();
     return <><div className="card">
         <div className="card-body">
@@ -29,12 +29,7 @@ export default function Certificate({title,org,verified,link,id}){
                         {link}
                     </div>
                 </div>
-                <div className="row d-flex ">
-                    <div className="col-3 col-sm-2">
-                        {verified?<span className="badge bg-success">Verified</span>:
-                        (id.toLowerCase()==account?.toLowerCase()?<span data-toggle="modal" data-target="#certificateModal" className="badge bg-secondary">Request for verification</span>:<span className="badge bg-danger">Unverified</span>)}
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

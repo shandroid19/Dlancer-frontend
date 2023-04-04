@@ -3,7 +3,7 @@ import styles from '../../styles/Users.module.css'
 export default function User({id,username,tasks,skills,image}){
     return<>
         <Link className={styles.cardlink} href={`/users/${id}`}>
-        <div className="card">
+        <div className="card shadow">
             <div className="card-body">
                 <div className="container">
                     <div className="row d-flex justify-content-center ">

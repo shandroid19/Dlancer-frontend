@@ -27,7 +27,8 @@ export default function Signup() {
   const [location, setLocation] = useState('')
   const [skills, setSkills] = useState([])
   const {account} = useMoralis();
-  const handleSkillAdd = () => {
+  const handleSkillAdd = (e) => {
+    e.preventDefault();
     const skillInput = document.getElementById('skillInput')
     const newSkill = skillInput.value.trim()
     if (newSkill.length > 0) {
@@ -54,8 +55,12 @@ export default function Signup() {
         <h3 >Sign up</h3>
         </div>
         <div className='card-body'>
-      
-      <ConnectButton/>
+          <div className='container'>
+            <div className='row d-flex justify-content-center py-5'>
+              <div className='col-sm-6 d-flex justify-content-center'>
+                  <ConnectButton/>
+            </div>
+            </div>
       {account?
       <form id="signupform">
       <div className="form-group">
@@ -89,7 +94,6 @@ export default function Signup() {
           id="wallet"
           placeholder="Enter username"
           value={account}
-          onChange={(e) => setUsername(e.target.value)}
         />
       </div>
       <div className="form-group">
@@ -136,6 +140,7 @@ export default function Signup() {
       </button>
       </Link>
       </form>:<p className='text-center'>Connect to your wallet to use the application</p>}
+    </div>
     </div>
     </div>
     </div>

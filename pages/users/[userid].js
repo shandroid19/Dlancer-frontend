@@ -5,37 +5,43 @@ import { useMoralis } from 'react-moralis';
 import styles from '../../styles/Users.module.css'
 import Certificate from './Certificate';
 import Project from './Project';
+import ProjectCard from '../search/ProjectCard';
 export default function Profile(){
     const router = useRouter();
     const {userid}=router.query;
     const imgurl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
-    const [data,setData] = useState({username:"employee",id:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
-    skills:["React.js","Python","Tensorflow"],
-    tasks:"5/9",image:imgurl,
-    location:"Bangalore",
-    tasks:"5/6",
-    email:"employee@gmail.com"
+    const [data,setData] = useState(
+      {username:"employee",id:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
+      skills:["React.js","Python","Tensorflow"],
+      tasks:"5/9",image:imgurl,
+      location:"Bangalore",
+      bio:"Hardworking student",
+      tasks:"5/6",
+      email:"employee@gmail.com"
 });
 const [newSkill, setNewSkill] = useState("");
 
 const inviteproject = useRef();
-const projects = [
-    {
-        title:"brain tumor",
-        tasks:5,
-        status:1
-    },
-    {
-        title:"social media",
-        tasks:5,
-        status:0
-    },
-    {
-        title:"ChatGPT",
-        tasks:5,
-        status:1
-    },
-];
+// const projects = [
+//     {
+//         title:"brain tumor",
+//         tasks:5,
+//         status:1
+//     },
+//     {
+//         title:"social media",
+//         tasks:5,
+//         status:0
+//     },
+//     {
+//         title:"ChatGPT",
+//         tasks:5,
+//         status:1
+//     },
+// ];
+const projects= [{id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
+  {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
+  {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},]
 
 const certificates = [
     {title:"web3",org:"coursera",link:"link here",verified:1},
@@ -50,7 +56,11 @@ const {account} = useMoralis();
 const accountprojects = [{id:1,title:"Todo app"},{id:2,title:"Self balancing robot"},{id:3,title:"gyroscope"}];
 
 const projectlist = projects.map((project,key)=>{
-    return <div className='row my-3'><Project key={key} tasks={project.tasks} title={project.title} status={project.status}/></div>
+    return <div className='row my-3'>
+      <div className='col-12'><ProjectCard key={key} project ={project}/></div>
+      {/* <ProjectCard key={key} tasks={project.tasks} title = {project.title} status = {project.status} /> */}
+      {/* <Project key={key} tasks={project.tasks} title={project.title} status={project.status}/> */}
+      </div>
 })
 
 const certificatelist = certificates.map((cert,key)=>{
@@ -109,6 +119,15 @@ const handleRemoveSkill = (key) => {
               </div>
               <div className='col-6 '>
                 <input type="text" className='form-control' name="username" defaultValue={data.username} />
+              </div>
+            </div>
+
+            <div className='row my-2'>
+              <div className='col-6'>
+                <b>Bio:</b>
+              </div>
+              <div className='col-6 '>
+                <input type="text" className='form-control' name="bio" defaultValue={data.bio} />
               </div>
             </div>
            
@@ -177,6 +196,14 @@ const displayprofile =  <div className="container">
                         </div>
                         <div className='col-6 '>
                             {data.username}
+                        </div>
+                    </div>
+                    <div className='row my-2'>
+                        <div className='col-6'>
+                            <b>Bio:</b>
+                        </div>
+                        <div className='col-6 '>
+                            {data.bio}
                         </div>
                     </div>
                     <div className='row my-2'>

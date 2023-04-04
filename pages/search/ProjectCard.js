@@ -1,11 +1,11 @@
 import Link from "next/link"
 export default function ProjectCard({project}){
-    return <div className="col-md-4"><Link href={`/projects/${project.id}`}>
+    return <Link href={`/projects/${project.id}`}>
         <div className="card shadow">
             <div className="card-body">
                 <div className="container">
                     <div className="row d-flex justify-content-center ">
-                            <div className='row my-2'>
+                            <div className='row my-1'>
                                 <div className="col-sm-6">
                                    <b>Title:</b>
                                 </div>
@@ -13,7 +13,7 @@ export default function ProjectCard({project}){
                                     {project.title}
                                 </div>
                             </div>
-                            <div className='row my-2'>
+                            <div className='row my-1'>
                                 <div className="col-sm-6">
                                     <b>tasks:</b>
                                 </div>
@@ -21,7 +21,7 @@ export default function ProjectCard({project}){
                                     {project.tasks}
                                 </div>
                             </div>
-                            <div className='row my-2'>
+                            <div className='row my-1'>
                                 <div className="col-sm-6">
                                     <b>Collaborators:</b>
                                 </div>
@@ -29,7 +29,7 @@ export default function ProjectCard({project}){
                                     {project.collaborators}
                                 </div>
                             </div>
-                            <div className='row my-2'>
+                            <div className='row my-1'>
                                 <div className="col-sm-6">
                                     <b>Skills:</b>
                                 </div>
@@ -39,7 +39,7 @@ export default function ProjectCard({project}){
                                     })}
                                 </div>
                             </div>
-                            <div className='row my-2'>
+                            <div className='row my-1'>
                                 <div className="col-sm-6">
                                     <b>Status:</b>
                                 </div>
@@ -54,6 +54,6 @@ export default function ProjectCard({project}){
             </div>
         </div>
         </Link>
-        </div>
+       
 
 }

@@ -115,10 +115,10 @@ export default function SubmitWork(){
                 </div>
                 <div className="row">
                 <div className="col-lg-1 col-md-2 col-sm-3">
-                    <button className="btn btn-primary" onClick={submit}>Submit</button>
+                    <button className="btn btn-primary" onClick={submit}>Submit task</button>
                 </div>
                 <div className="col-lg-1 col-md-2 col-sm-3">
-                    <button className="btn btn-danger" onClick={onCancel}>Cancel</button>
+                    <button className="btn btn-danger" onClick={onCancel}>Cancel task</button>
                 </div>
             </div>
             </div>

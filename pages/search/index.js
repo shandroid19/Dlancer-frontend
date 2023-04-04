@@ -16,7 +16,7 @@ function ProjectList({data, filterText}) {
   });
 
   const listed = filteredData.map((project,key)=>{
-    return <ProjectCard key={key} project ={project}/>
+    return <div className="col-md-4"><ProjectCard key={key} project ={project}/></div>
   });
   return <div className="row d-flex justify-content-center">{listed}</div>;
 }

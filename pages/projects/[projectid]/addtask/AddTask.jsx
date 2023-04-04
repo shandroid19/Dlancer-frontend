@@ -6,7 +6,7 @@ export default function AddTask(){
     const taskname = useRef("");
     const description = useRef("");
     const testCases = useRef([]);
-    const developer = useRef("");
+    const contributor = useRef("");
     const reward = useRef("");
     const timelimit = useRef(0);
     const {chainId:chainIdhex} = useMoralis();
@@ -78,7 +78,7 @@ export default function AddTask(){
                         <div className="col-sm-4"><input ref={reward} type="text" placeholder="in ETH" className="form-control"/></div>
                     </div>
                     <div className="form-group row my-3">
-                    <label htmlFor="developer" ref={developer} className="col-sm-2 col-form-label">Developer</label>
+                    <label htmlFor="contributor" ref={contributor} className="col-sm-2 col-form-label">Contributor</label>
                         <div className="col-sm-4">
                         <select className="form-control my-1 mr-sm-2" >
                             <option defaultValue="0xFABB0ac9d68B0B445fB7357272Ff202C5651694a">Admin</option>
