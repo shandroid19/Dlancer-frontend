@@ -25,6 +25,7 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [location, setLocation] = useState('')
+  const [bio, setBio] = useState('')
   const [skills, setSkills] = useState([])
   const {account} = useMoralis();
   const handleSkillAdd = (e) => {
@@ -48,7 +49,7 @@ export default function Signup() {
   return (
     <div className="container p-5">
       <div className='row d-flex justify-content-center'>
-        <div className='col-sm-6'>
+        <div className='col-sm-6 col-md-10'>
           <div className='container'>
       <div className='card shadow'>
         <div className='card-header text-center'>
@@ -84,6 +85,18 @@ export default function Signup() {
           placeholder="Enter username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="username">Bio</label>
+        <textarea
+          type="text"
+          rows={3}
+          className="form-control"
+          id="bio"
+          placeholder="Enter bio"
+          value={username}
+          onChange={(e) => setBio(e.target.value)}
         />
       </div>
       <div className="form-group">
