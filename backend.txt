@@ -2,7 +2,7 @@ pages/index (signup page):
     GET req: {string walletid}  resp: true/false
     POST req: {string email, string username, string walletid,string bio,string location, array skills}
 
-pages.users (users list page):
+pages/users (users list page):
     GET req: query string
         res: array of [{string name, string walletid, int tasks, int completed, array skills}]
     
@@ -10,7 +10,7 @@ pages/users/[walletid]:
     GET req: {string walletid}
         res: {string username, string bio, string walletid, int tasks, int completed, string location, array skills, array(projects{title, tasks,team,array(skills),bool status}), array(certificates({string title, string org, string link}))} 
     
-    POST req: {string senderid, string receiverid}
+    POST req: {string senderid, string receiverid, int projectid}
          (goes to request list of the receiver)
     
     POST req: {string username, string bio, string email, string location, array(skills)}
@@ -30,3 +30,7 @@ pages/projects/create
 pages/projects/[projectid]
     GET req:{string projectid}
         res:{string description,array(collaborators id), array(task{int taskid, string remainingTime, int reward })}
+
+pages/projects/[projectid]/[taskid]
+    POST req:{string walletid}
+
