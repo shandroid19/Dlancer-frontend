@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import {useWeb3Contract,useMoralis} from 'react-moralis'
-import { abi,addresses } from "../../../../constants/index";
+import { abi,addresses,BUSDabi } from "@/constants";
 import { ethers } from "ethers";
 export default function AddTask(){
+    const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
     const taskname = useRef("");
     const description = useRef("");
     const testCases = useRef([]);
@@ -11,7 +12,7 @@ export default function AddTask(){
     const timelimit = useRef(0);
     const {chainId:chainIdhex} = useMoralis();
     const chainId = parseInt(chainIdhex);
-    const contractAddress = addresses[chainId]?addresses[chainId][0]:null;
+    const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const {runContractFunction:activateTask} = useWeb3Contract(
         {
             abi:abi,
@@ -25,9 +26,22 @@ export default function AddTask(){
         }
     )
 
-    const activate = async ()=>{
-        await activateTask();
-    }
+        const onActivate = async ()=>{
+        
+            try {
+                //after deploying the contract on the backend, execute below functions using contractAddress obtained from serverside
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                const taskContract = new ethers.Contract(contractAddress, abi, signer);
+                const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
+                // const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000") );
+                const tx = await taskContract.activateTask();
+                const result = await taskContract.isActivated();
+                console.log(result)
+            } catch (error) {
+                console.error(error);
+            }
+        }
    
 
     const TestCase = ()=>{
@@ -90,7 +104,7 @@ export default function AddTask(){
                     </div>
                     <div className = "form-group row my-3 d-flex flex-row-reverse">
                         <div className="col-sm-1">
-                        <button className="btn btn-primary" onClick={async()=>await activate()}>Create</button>
+                        <button className="btn btn-primary" onClick={async()=>await onActivate()}>Create</button>
                         </div>
                         <div className="col-sm-1">
                         <button className="btn btn-danger ">Cancel</button>

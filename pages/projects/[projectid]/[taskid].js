@@ -1,10 +1,17 @@
 import Header from "@/components/Header";
 import { useRef } from "react";
 import { useMoralis,useWeb3Contract } from "react-moralis";
-import { abi,addresses } from "@/constants";
+import { abi,addresses,BUSDabi } from "@/constants";
 import { useRouter } from "next/router";
+import { ethers } from "ethers";
+
 export default function SubmitWork(){
+    const {chainId:chainIdhex,isWeb3Enabled} = useMoralis();
+    const chainId= parseInt(chainIdhex);
+    const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
+    const {account} = useMoralis();
     const router= useRouter();
+    const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
     const params = router.query;
     const task = {
         name:"Todo List",
@@ -18,25 +25,31 @@ export default function SubmitWork(){
         ]
     }
     const code = useRef(" ");
-      const submit = ()=>{
-      console.log("submitted")
+    const submit = async ()=>{
+        try{
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const taskContract = new ethers.Contract(contractAddress, abi, signer);
+            const tx = await taskContract.completeTask();
+            tx.wait(1);
+            console.log(await taskContract.isCompleted());
+        } catch(e){
+            console.log(e)
+        }
     }
       
 
-    const {chainId:chainIdhex,isWeb3Enabled} = useMoralis();
-    const chainId= parseInt(chainIdhex);
-    const contractAddress= addresses[chainId]?addresses[chainId][0]:null;
-    const {runContractFunction:cancelTask} = useWeb3Contract(
-        {
-            abi:abi,
-            contractAddress:contractAddress,
-            functionName:"cancelTask",
-            chainId:chainId
-        }
-    )
-
     const onCancel = async ()=>{
-        await cancelTask();
+        try{
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            const taskContract = new ethers.Contract(contractAddress, abi, signer);
+            const tx = await taskContract.cancelTask();
+            tx.wait(1);
+            console.log(await taskContract.isCancelled());
+        } catch(e){
+            console.log(e)
+        }
     }
 
 
