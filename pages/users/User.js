@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from '../../styles/Users.module.css'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function User({id,username,tasks,skills,image}){

@@ -1,44 +1,53 @@
 import Header from '@/components/Header';
 import { useRouter } from 'next/router'
-import { useRef,useState } from 'react';
+import { useRef,useState,useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 import styles from '../../styles/Users.module.css'
 import Certificate from './Certificate';
 import Project from './Project';
 import ProjectCard from '../search/ProjectCard';
+import { skillsets } from '@/constants';
 export default function Profile(){
     const router = useRouter();
     const {userid}=router.query;
+    const [skills, setSkills] = useState([]);
+    const [certlist,setCertlist] = useState([])
+
     const imgurl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
     const [data,setData] = useState(
-      {username:"employee",id:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
+      {username:"employee",walletID:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
       skills:["React.js","Python","Tensorflow"],
-      tasks:"5/9",image:imgurl,
+      image:imgurl,
       location:"Bangalore",
       bio:"Hardworking student",
       tasks:"5/6",
       email:"employee@gmail.com"
 });
 const [newSkill, setNewSkill] = useState("");
+useEffect(()=>{
+    fetch('http://localhost:5000/api/users/'+account).then((res)=>{
+        return res.json();
+    }).then((res)=>{
+        console.log(res)
+        setData(res)
+        setSkills(res.skills)
+    }).catch((e)=>{
+        console.error(e);
+    })
+},[])
+
+useEffect(()=>{
+  fetch('http://localhost:5000/api/users/certs/'+account).then((res)=>{
+      return res.json();
+  }).then((res)=>{
+      console.log(res)
+      setCertlist(res)
+  }).catch((e)=>{
+      console.error(e);
+  })
+},[])
 
 const inviteproject = useRef();
-// const projects = [
-//     {
-//         title:"brain tumor",
-//         tasks:5,
-//         status:1
-//     },
-//     {
-//         title:"social media",
-//         tasks:5,
-//         status:0
-//     },
-//     {
-//         title:"ChatGPT",
-//         tasks:5,
-//         status:1
-//     },
-// ];
 const projects= [{id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
   {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
   {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},]
@@ -63,40 +72,25 @@ const projectlist = projects.map((project,key)=>{
       </div>
 })
 
-const certificatelist = certificates.map((cert,key)=>{
-    return <div className='row my-3'><Certificate key={key} id={data.id} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/></div>
+const certificatelist = certlist.map((cert,key)=>{
+    return <div className='row my-3'><Certificate key={key}  title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/></div>
 })
 
 const invite = ()=>{
     console.log("invite for project id",inviteproject.current.value,"sent to user",account)
 }
 
+const handleSkillAdd = (e) => {
+  const selectedSkill = e.target.value;
+  if (!skills.includes(selectedSkill)) {
+    setSkills([...skills, selectedSkill]);
+  }    
+}
 
+const handleSkillRemove = (skill) => {
+  setSkills(skills.filter((s) => s !== skill))
+}
 
-
-const handleRemoveSkill = (key) => {
-    setData((prevData) => {
-      return {
-        ...prevData,
-        skills: prevData.skills.filter((skill, index) => index !== key)
-      };
-    });
-    console.log(data);
-  };
-  
-  const handleAddSkill = (e) => {
-    e.preventDefault();
-    if (newSkill.trim() !== "") {
-      setData((prevData) => {
-        return {
-          ...prevData,
-          skills: [...prevData.skills, newSkill]
-        };
-      });
-      setNewSkill("");
-    }
-    
-  };
   const [edit,setEdit] = useState(false);
   const handleSave = ()=>{
     console.log('saved');
@@ -153,18 +147,31 @@ const handleRemoveSkill = (key) => {
                 <b>Skills:</b>
             </div>
             <div className='col-6'>
-         <div className="input-group my-2">
-                <input type="text" className="form-control" placeholder="Add a skill" value={newSkill} onChange={(e) => setNewSkill(e.target.value)} />
-                <button className="btn btn-primary" onClick={handleAddSkill}>Add</button>
-             </div>
-                {data.skills.map((skill, key) => {
-                return (
-                    <span key={key} className="badge bg-secondary mx-1" onClick={() => handleRemoveSkill(key)}>
-                    {skill}
-                    <span className="ms-1 fw-bold">x</span>
-                    </span>
-                 );
-                })}
+      
+             <div className="input-group mb-3">
+            <select
+            className="form-control"
+            id="skillSelect"
+            onChange={handleSkillAdd}
+            >
+          <option defaultValue="">-- Select a skill --</option>
+            {skillsets.map((item,key)=>{
+                return <option key={key} value={key}>{item}</option>
+            })}
+          </select>
+          </div>
+                
+                <div className="skills-list">
+    {skills.map((skill, index) => (
+      <span
+        key={index}
+        className="badge badge-secondary mr-2"
+        onClick={() => handleSkillRemove(skill)}
+      >
+        {skillsets[skill]} &times;
+      </span>
+    ))}
+  </div>
     
              </div>
             </div>
@@ -211,7 +218,7 @@ const displayprofile =  <div className="container">
                             <b>Wallet:</b>
                         </div>
                         <div className='col-6'>
-                            {data.id.slice(0,6)}...{data.id.slice(data.id.length-4)}
+                            {data.walletID.slice(0,6)}...{data.walletID.slice(data.walletID.length-4)}
                         </div>
                     </div>
                     <div className='row my-2'>
@@ -227,7 +234,7 @@ const displayprofile =  <div className="container">
                             <b>Task completed:</b>
                         </div>
                         <div className='col-6'>
-                            {data.tasks}
+                            {data.tasksAssigned}
                         </div>
                     </div>
                     <div className='row my-2'>
@@ -243,13 +250,13 @@ const displayprofile =  <div className="container">
                             <b>Skills:</b>
                         </div>
                         <div className='col-6'>
-                        {data.skills.map((skill,key)=>{
-                            return <span key={key} className="badge bg-secondary">{skill}</span>
+                        {skills.map((skill,key)=>{
+                            return <span key={key} className="badge bg-secondary">{skillsets[skill]}</span>
                         })}
                         </div>
                     </div>
 
-                        {account?.toLowerCase()==data.id.toLowerCase()?
+                        {account?.toLowerCase()==data.walletID.toLowerCase()?
                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
                         Edit profile
                     </div>:

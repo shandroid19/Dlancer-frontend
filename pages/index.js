@@ -71,6 +71,10 @@ export default function Signup() {
     }    
   }
 
+  const handleSkillRemove = (skill) => {
+    setSkills(skills.filter((s) => s !== skill))
+  }
+
   const validatemail = (e)=>{
     setEmail(e.target.value)
     if ( !/^\S+@\S+\.\S+$/.test(e.target.value)) {
@@ -89,9 +93,7 @@ export default function Signup() {
     }
   }
 
-  const handleSkillRemove = (skill) => {
-    setSkills(skills.filter((s) => s !== skill))
-  }
+  
 
   const handleSignup = (e) => {
     e.preventDefault();

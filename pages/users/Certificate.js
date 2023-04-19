@@ -1,11 +1,11 @@
 import { useMoralis } from "react-moralis"
 
-export default function Certificate({title,org,link,id}){
+export default function Certificate({title,org,link}){
     const {account} = useMoralis();
     return <><div className="card">
         <div className="card-body">
             <div className="container">
-                <div className="row">
+                <div className="row py-2">
                     <div className="col-sm-4">
                         <b>Title</b>
                     </div>
@@ -13,7 +13,7 @@ export default function Certificate({title,org,link,id}){
                         {title}
                     </div>
                 </div>
-                <div className="row">
+                <div className="row py-2">
                     <div className="col-sm-4">
                         <b>Organization</b>
                     </div>
@@ -21,13 +21,13 @@ export default function Certificate({title,org,link,id}){
                         {org}
                     </div>
                 </div>
-                <div className="row">
+                <div className="row py-2">
                     <div className="col-sm-4">
-                        <b>link</b>
+                        <a href={link} target="_blank" className="btn btn-primary text-white">
+                            Open
+                        </a>
                     </div>
-                    <div className="col-sm-8">
-                        {link}
-                    </div>
+                    
                 </div>
                 
             </div>
