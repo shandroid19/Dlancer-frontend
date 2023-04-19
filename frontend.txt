@@ -1,0 +1,4 @@
+done:
+    signup (using api/users/signup)
+    autorization at every page (using the api/users/signin/:walletid route)
+    
