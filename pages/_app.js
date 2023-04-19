@@ -61,13 +61,21 @@ function AppWrapper({ Component, pageProps }) {
     )
     return message
   }else if(router.pathname!=='/'){
-    console.log("nope",router.pathname)
     fetch('http://localhost:5000/api/users/signin/'+account).then((res)=>{
-      if(res.status!=200) throw new Error(res.message);
+      if(res.status!=200) throw new Error("User not registered")
       console.log("successfully logged in");
     }).catch((e)=>{
       console.error(e);
       router.push('/');
+    })
+  }
+  else if(router.pathname==='/'){
+    fetch('http://localhost:5000/api/users/signin/'+account).then((res)=>{
+      if(res.status!=200) throw new Error("User not registered")
+      console.log("successfully logged in");
+      router.push('/users/'+account);
+    }).catch((e)=>{
+      console.error(e);
     })
   }
 

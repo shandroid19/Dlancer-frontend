@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useMoralis } from 'react-moralis'
 import { ConnectButton } from 'web3uikit'
 import { useRouter } from 'next/router';
-
-import Link from 'next/link'
+import { skillsets } from '@/constants';
 
 export default function Signup() {
   const router = useRouter();
@@ -19,49 +18,6 @@ export default function Signup() {
   const [org,setOrg] = useState('');
   const [link,setLink] = useState('');
   const {account} = useMoralis();
-  const skillsets = [
-    'React.js',
-    'AngularJS',
-    'Vue.js',
-    'Ember.js',
-    'Backbone.js',
-    'Node.js',
-    'Django',
-    'Spring Boot',
-    'Flutter',
-    'React Native',
-    'Xamarin',
-    'Swift',
-    'Kotlin',
-    'MySQL',
-    'MongoDB',
-    'Oracle',
-    'PostgreSQL',
-    'SQL Server',
-    'Amazon Web Services (AWS)',
-    'Microsoft Azure',
-    'Google Cloud Platform (GCP)',
-    'Docker',
-    'Kubernetes',
-    'Jenkins',
-    'Ansible',
-    'Terraform',
-    'JavaScript',
-    'Python',
-    'Java',
-    'Ruby',
-    'C++',
-    'Jest',
-    'Selenium',
-    'Cypress',
-    'JUnit',
-    'Pytest',
-    'TensorFlow',
-    'PyTorch',
-    'Scikit-learn',
-    'Keras',
-    'OpenCV'
-    ];
 
     const handleAddCertificate = () => {
       const certificate = {title:title, organization:org,link:link}

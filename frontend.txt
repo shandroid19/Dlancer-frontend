@@ -1,4 +1,6 @@
 done:
     signup (using api/users/signup)
-    autorization at every page (using the api/users/signin/:walletid route)
-    
+    authorization at every page (using the api/users/signin/:walletid)
+    users display in /users route (using api/users/)
+next:
+    user profile data fetch

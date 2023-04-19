@@ -2,49 +2,7 @@ import Link from "next/link";
 import styles from '../../styles/Users.module.css'
 import { useState } from "react";
 import { useRouter } from "next/router";
-const skillsets = [
-    'React.js',
-    'AngularJS',
-    'Vue.js',
-    'Ember.js',
-    'Backbone.js',
-    'Node.js',
-    'Django',
-    'Spring Boot',
-    'Flutter',
-    'React Native',
-    'Xamarin',
-    'Swift',
-    'Kotlin',
-    'MySQL',
-    'MongoDB',
-    'Oracle',
-    'PostgreSQL',
-    'SQL Server',
-    'Amazon Web Services (AWS)',
-    'Microsoft Azure',
-    'Google Cloud Platform (GCP)',
-    'Docker',
-    'Kubernetes',
-    'Jenkins',
-    'Ansible',
-    'Terraform',
-    'JavaScript',
-    'Python',
-    'Java',
-    'Ruby',
-    'C++',
-    'Jest',
-    'Selenium',
-    'Cypress',
-    'JUnit',
-    'Pytest',
-    'TensorFlow',
-    'PyTorch',
-    'Scikit-learn',
-    'Keras',
-    'OpenCV'
-    ];
+import { skillsets } from "@/constants";
 export default function User({id,username,tasks,skills,image}){
     const [showMoreSkills,setShowMoreSkills] = useState(false)
     const router = useRouter()

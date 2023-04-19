@@ -1,4 +1,47 @@
 const abi = require('./abi.json')
 const addresses = require('./addresses.json')
 const BUSDabi = require('./BUSDabi.json')
-module.exports = {abi,addresses,BUSDabi}
+const skillsets = [
+    'React.js',
+    'AngularJS',
+    'Vue.js',
+    'Ember.js',
+    'Backbone.js',
+    'Node.js',
+    'Django',
+    'Spring Boot',
+    'Flutter',
+    'React Native',
+    'Xamarin',
+    'Swift',
+    'Kotlin',
+    'MySQL',
+    'MongoDB',
+    'Oracle',
+    'PostgreSQL',
+    'SQL Server',
+    'Amazon Web Services (AWS)',
+    'Microsoft Azure',
+    'Google Cloud Platform (GCP)',
+    'Docker',
+    'Kubernetes',
+    'Jenkins',
+    'Ansible',
+    'Terraform',
+    'JavaScript',
+    'Python',
+    'Java',
+    'Ruby',
+    'C++',
+    'Jest',
+    'Selenium',
+    'Cypress',
+    'JUnit',
+    'Pytest',
+    'TensorFlow',
+    'PyTorch',
+    'Scikit-learn',
+    'Keras',
+    'OpenCV'
+    ];
+module.exports = {abi,addresses,BUSDabi,skillsets}
