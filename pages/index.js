@@ -140,7 +140,7 @@ export default function Signup() {
   const handleSignup = (e) => {
     e.preventDefault();
       
-    fetch('http://localhost:5000/api/users/signup', {
+  fetch('http://localhost:5000/api/users/signup', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({

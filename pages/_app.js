@@ -25,9 +25,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { NotificationProvider } from 'web3uikit'
 import { MoralisProvider, useMoralis } from 'react-moralis'
 import {ConnectButton} from 'web3uikit'
+import {router} from 'next/router'
 
 function AppWrapper({ Component, pageProps }) {
-  const { isWeb3Enabled } = useMoralis()
+  const { isWeb3Enabled,account } = useMoralis()
 
   // Show "please connect wallet to continue" page if wallet is not connected
   if (!isWeb3Enabled) {
@@ -59,6 +60,15 @@ function AppWrapper({ Component, pageProps }) {
       </div>
     )
     return message
+  }else if(router.pathname!=='/'){
+    console.log("nope",router.pathname)
+    fetch('http://localhost:5000/api/users/signin/'+account).then((res)=>{
+      if(res.status!=200) throw new Error(res.message);
+      console.log("successfully logged in");
+    }).catch((e)=>{
+      console.error(e);
+      router.push('/');
+    })
   }
 
   // If wallet is connected, render the Component
