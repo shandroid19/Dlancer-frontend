@@ -9,7 +9,8 @@ export default function TaskList({tasks,projectid,usermode}){
         return <TaskCard key={key} usermode={usermode} projectid={projectid} task={task}/>
     })
     return <><div className="container m-3">
-        {listed}
+        {!tasks.length?<p className="text-center py-5">Tasks have not been created yet</p>:listed}
+       
         <div className="row d-flex justify-content-center">
             <div className="col-sm-3">
                 {usermode==2?<Link href={`/projects/${projectid}/addtask`}>

@@ -2,5 +2,12 @@ done:
     signup (using api/users/signup)
     authorization at every page (using the api/users/signin/:walletid)
     users display in /users route (using api/users/)
+    edit profile in /users/userid (using /api/users/editprofile)
+    certificates display in /useres/userid (using api/users/certs)
+    certificates creation in /users/userid (using api/users/addcert)
+    certificates removal in /users/userid (using api/users/removecert)
+    projects display in /projects (using api/projects)
+    projects posting in /projects/create (using api/projects/:walletid)
+    project data get in /projects/projectID (using projects/:projectid)
 next:
     user profile data fetch
