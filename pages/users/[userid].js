@@ -86,7 +86,9 @@ const projectlist = projects.map((project,key)=>{
 })
 
 const certificatelist = certlist.map((cert,key)=>{
-    return <div className='row my-3'><Certificate key={key}  title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/></div>
+    return <div className='row my-3'>
+      <Certificate key={key}  title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
+      </div>
 })
 
 const invite = ()=>{
@@ -364,6 +366,13 @@ const displayprofile =  <div className="container">
                 <div className='row'>
                     <div style={{height:'70vh',overflowY:'scroll'}} className='container bg-secondary p-sm-5'>
                         {certificatelist}
+                        <div className='row my-2 justify-content-center d-flex'>
+                          <div className='col-sm-6 justify-content-center d-flex'>
+                            <button className='btn btn-primary'  data-toggle="modal" data-target="#certificateModal">
+                              Add certificate
+                            </button>
+                          </div>
+                        </div>
                     </div>
                 </div>
                 </div>
