@@ -110,7 +110,7 @@ export default function Signup() {
     skills,
     certificates: certificates.map(cert => ({
       title: cert.title,
-      organization: cert.organization,
+      org: cert.organization,
       link: cert.link
     }))
   })
@@ -234,7 +234,7 @@ export default function Signup() {
   <label htmlFor="certificates">Certificates</label>
   <ul>
   {certificates.map((certificate, index) => {
-    return <CertificateCard certificate={certificate} index={index}></CertificateCard>
+    return <CertificateCard key={index} certificate={certificate} index={index}></CertificateCard>
 
 })}
   </ul>

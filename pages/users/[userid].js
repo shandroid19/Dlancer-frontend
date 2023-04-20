@@ -1,17 +1,20 @@
 import Header from '@/components/Header';
-import { useRouter } from 'next/router'
 import { useRef,useState,useEffect } from 'react';
 import { useMoralis } from 'react-moralis';
 import styles from '../../styles/Users.module.css'
 import Certificate from './Certificate';
-import Project from './Project';
 import ProjectCard from '../search/ProjectCard';
 import { skillsets } from '@/constants';
 export default function Profile(){
-    const router = useRouter();
-    const {userid}=router.query;
     const [skills, setSkills] = useState([]);
     const [certlist,setCertlist] = useState([])
+    const [projects,setProjects] = useState([])
+    const [edit,setEdit] = useState(false);
+
+    const email = useRef("")
+    const username = useRef("");
+    const bio = useRef("");
+    const location = useRef("");
 
     const imgurl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
     const [data,setData] = useState(
@@ -23,7 +26,6 @@ export default function Profile(){
       tasks:"5/6",
       email:"employee@gmail.com"
 });
-const [newSkill, setNewSkill] = useState("");
 useEffect(()=>{
     fetch('http://localhost:5000/api/users/'+account).then((res)=>{
         return res.json();
@@ -47,18 +49,29 @@ useEffect(()=>{
   })
 },[])
 
-const inviteproject = useRef();
-const projects= [{id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
-  {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
-  {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},]
+useEffect(()=>{
+  fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
+      return res.json();
+  }).then((res)=>{
+      console.log(res)
+      setProjects(res)
+  }).catch((e)=>{
+      console.error(e);
+  })
+},[])
 
-const certificates = [
-    {title:"web3",org:"coursera",link:"link here",verified:1},
-    {title:"react.js",org:"coursera",link:"link here",verified:1},
-    {title:"deep learning",org:"coursera",link:"link here",verified:0},
-    {title:"fundamentals of blockchain",org:"coursera",link:"link here",verified:0},
-    {title:"advanced data structues with java",org:"coursera",link:"link here",verified:1},
-];
+const inviteproject = useRef();
+// const projects= [{id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
+//   {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
+//   {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},]
+
+// const certificates = [
+//     {title:"web3",org:"coursera",link:"link here",verified:1},
+//     {title:"react.js",org:"coursera",link:"link here",verified:1},
+//     {title:"deep learning",org:"coursera",link:"link here",verified:0},
+//     {title:"fundamentals of blockchain",org:"coursera",link:"link here",verified:0},
+//     {title:"advanced data structues with java",org:"coursera",link:"link here",verified:1},
+// ];
 
 const {account} = useMoralis();
 
@@ -91,9 +104,22 @@ const handleSkillRemove = (skill) => {
   setSkills(skills.filter((s) => s !== skill))
 }
 
-  const [edit,setEdit] = useState(false);
+
   const handleSave = ()=>{
-    console.log('saved');
+    // console.log(email.current.value,username.current.value, location.current.value, bio.current.value, skills);
+    fetch('http://localhost:5000/api/users/edit/'+account, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username:username.current.value,
+    email:email.current.value,
+    location:location.current.value,
+    bio:bio.current.value,
+    skills
+  })
+}).then((res)=>{
+  window.location.reload()
+}).catch((e)=>console.log(e.message))
     setEdit(false);
 }
 
@@ -112,7 +138,7 @@ const handleSkillRemove = (skill) => {
                 <b>Username:</b>
               </div>
               <div className='col-6 '>
-                <input type="text" className='form-control' name="username" defaultValue={data.username} />
+                <input type="text" className='form-control' ref={username} name="username" defaultValue={data.username} />
               </div>
             </div>
 
@@ -121,7 +147,7 @@ const handleSkillRemove = (skill) => {
                 <b>Bio:</b>
               </div>
               <div className='col-6 '>
-                <input type="text" className='form-control' name="bio" defaultValue={data.bio} />
+                <input type="text" className='form-control' ref={bio} name="bio" defaultValue={data.bio} />
               </div>
             </div>
            
@@ -130,7 +156,7 @@ const handleSkillRemove = (skill) => {
                 <b>Email:</b>
               </div>
               <div className='col-6'>
-                <input type="email" className='form-control' name="email" defaultValue={data.email} />
+                <input type="email" className='form-control' ref={email} name="email" defaultValue={data.email} />
               </div>
             </div>
             
@@ -139,7 +165,7 @@ const handleSkillRemove = (skill) => {
                 <b>Location:</b>
               </div>
               <div className='col-6'>
-                <input type="text" className='form-control' name="location" defaultValue={data.location} />
+                <input type="text" className='form-control' ref={location} name="location" defaultValue={data.location} />
               </div>
             </div>
             <div className='row my-2'>
@@ -250,7 +276,7 @@ const displayprofile =  <div className="container">
                             <b>Skills:</b>
                         </div>
                         <div className='col-6'>
-                        {skills.map((skill,key)=>{
+                        {data.skills.map((skill,key)=>{
                             return <span key={key} className="badge bg-secondary">{skillsets[skill]}</span>
                         })}
                         </div>
