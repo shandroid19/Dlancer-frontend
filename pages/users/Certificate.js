@@ -1,27 +1,24 @@
 import { useMoralis } from "react-moralis"
 import { useState } from "react";
 
-export default function Certificate({title,org,link}){
+export default function Certificate({title,org,link,currentuser,id}){
     const {account} = useMoralis();
-    const [newtitle,setTitle] = useState('');
-     const [neworg,setOrg] = useState('');
-     const [newlink,setLink] = useState('');
-     const handleAddCertificate = ()=>{
-        fetch('http://localhost:5000/api/users/addcert/'+account,
+    
+     
+
+     const handleRemoveCertificate = ()=>{
+        fetch('http://localhost:5000/api/users/removecert/'+account+'?certID='+id,
         {
-            method:'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:JSON.stringify({
-                title:newtitle,
-                org:neworg,
-                link:newlink
-            })
+            method:'DELETE',
         }).then((res)=>{
-            if(res.status!==200) throw new Error("there was an error while adding certificate")
-            window.location.reload()}).catch((e)=>{
+            if(res.status!==200) throw new Error("there was an error while removing certificate")
+            console.log("successfully deleted");
+            window.location.reload()
+        }).catch((e)=>{
             console.error(e)
         })
      }
+
     return <><div className="card">
         <div className="card-body">
             <div className="container">
@@ -47,6 +44,11 @@ export default function Certificate({title,org,link}){
                             Open
                         </a>
                     </div>
+                    {currentuser==account?<div className="col-sm-4">
+                        <a data-toggle="modal" data-target="#removeCertificateModal" target="_blank" className="btn btn-danger text-white">
+                            Delete
+                        </a>
+                    </div>:<></>}
                     
                 </div>
                 
@@ -55,35 +57,24 @@ export default function Certificate({title,org,link}){
     </div>
 
 
+     
+
      {/* MODAL STARTS HERE */}
-     <div className="modal fade" id="certificateModal" tabIndex="-1" role="dialog" aria-labelledby="certificateModalLabel" aria-hidden="true">
+     <div className="modal fade" id="removeCertificateModal" tabIndex="-1" role="dialog" aria-labelledby="certificateModalLabel" aria-hidden="true">
   <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" id="certificateModalLabel">Add Certificate</h5>
+        <h5 className="modal-title" >Remove Certificate</h5>
         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div className="modal-body">
-        <form>
-          <div className="form-group">
-            <label htmlFor="certificateTitle">Title</label>
-            <input type="text" className="form-control" value={newtitle} onChange={(e)=>setTitle(e.target.value)}  placeholder="Enter certificate title" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="certificateLink">Link</label>
-            <input type="text" className="form-control" value={newlink}  onChange={(e)=>setLink(e.target.value)} id="certificateLink" placeholder="Enter certificate link" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="certificateOrg">Organization</label>
-            <input type="text" className="form-control" value={neworg} onChange={(e)=>setOrg(e.target.value)} id="certificateOrg" placeholder="Enter certificate organization" />
-          </div>
-        </form>
+        <p>Are you sure you want to remove this certificate?</p>
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={handleAddCertificate}>Add</button>
+        <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={handleRemoveCertificate}>Remove</button>
       </div>
     </div>
   </div>

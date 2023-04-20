@@ -10,7 +10,9 @@ export default function Profile(){
     const [certlist,setCertlist] = useState([])
     const [projects,setProjects] = useState([])
     const [edit,setEdit] = useState(false);
-
+    const [newtitle,setTitle] = useState('');
+    const [neworg,setOrg] = useState('');
+    const [newlink,setLink] = useState('');
     const email = useRef("")
     const username = useRef("");
     const bio = useRef("");
@@ -87,7 +89,7 @@ const projectlist = projects.map((project,key)=>{
 
 const certificatelist = certlist.map((cert,key)=>{
     return <div className='row my-3'>
-      <Certificate key={key}  title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
+      <Certificate key={key} currentuser={data.walletID} id={cert._id} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
       </div>
 })
 
@@ -104,6 +106,23 @@ const handleSkillAdd = (e) => {
 
 const handleSkillRemove = (skill) => {
   setSkills(skills.filter((s) => s !== skill))
+}
+
+const handleAddCertificate = ()=>{
+  fetch('http://localhost:5000/api/users/addcert/'+account,
+  {
+      method:'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:JSON.stringify({
+          title:newtitle,
+          org:neworg,
+          link:newlink
+      })
+  }).then((res)=>{
+      if(res.status!==200) throw new Error("there was an error while adding certificate")
+      window.location.reload()}).catch((e)=>{
+      console.error(e)
+  })
 }
 
 
@@ -341,6 +360,42 @@ const displayprofile =  <div className="container">
     </div>
     </div>
     </div>
+    {/* MODAL ENDS HERE */}
+
+
+    {/* MODAL STARTS HERE */}
+    <div className="modal fade" id="certificateModal" tabIndex="-1" role="dialog" aria-labelledby="certificateModalLabel" aria-hidden="true">
+  <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" id="certificateModalLabel">Add Certificate</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div className="modal-body">
+        <form>
+          <div className="form-group">
+            <label htmlFor="certificateTitle">Title</label>
+            <input type="text" className="form-control" value={newtitle} onChange={(e)=>setTitle(e.target.value)}  placeholder="Enter certificate title" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="certificateLink">Link</label>
+            <input type="text" className="form-control" value={newlink}  onChange={(e)=>setLink(e.target.value)} id="certificateLink" placeholder="Enter certificate link" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="certificateOrg">Organization</label>
+            <input type="text" className="form-control" value={neworg} onChange={(e)=>setOrg(e.target.value)} id="certificateOrg" placeholder="Enter certificate organization" />
+          </div>
+        </form>
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={handleAddCertificate}>Add</button>
+      </div>
+    </div>
+  </div>
+</div>
     {/* MODAL ENDS HERE */}
 
 
