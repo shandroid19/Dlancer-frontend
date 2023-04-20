@@ -1,6 +1,41 @@
 import Header from "@/components/Header";
+import { useRef, useState } from "react";
+import { skillsets } from "@/constants";
+import { useMoralis } from "react-moralis";
+import { useRouter } from "next/router";
+import { headers } from "@/next.config";
 
 export default function CreateProject(){
+    const router = useRouter();
+    const {account} = useMoralis();
+    const [skills, setSkills] = useState([]);
+    const name= useRef('')
+    const description = useRef('') 
+    const handleSkillAdd = (e) => {
+        const selectedSkill = e.target.value;
+        if (!skills.includes(selectedSkill)) {
+          setSkills([...skills, selectedSkill]);
+        }    
+      }
+    
+      const handleCreate = ()=>{
+        console.log(name.current.value,description.current.value,skills)
+        fetch('http://localhost:5000/api/projects/'+account,
+        {
+            method:"POST",
+            headers: { 'Content-Type': 'application/json' },
+            body:JSON.stringify({
+                projName:name.current.value,
+                description:description.current.value,
+                skills:skills
+            })
+        }).then((res)=>{
+            if(res.status!=200) throw new Error(res.json().message);
+            console.log("project successfully created");
+            router.push('/projects');
+        }).catch((e)=>console.log(e.message))
+      }
+
     return <>
         <Header/>
 
@@ -19,7 +54,7 @@ export default function CreateProject(){
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-danger" data-dismiss="modal">No</button>
-        <button type="button" className="btn btn-success" >Yes</button>
+        <button type="button" onClick={handleCreate} className="btn btn-success" data-dismiss="modal">Yes</button>
       </div>
     </div>
     </div>
@@ -38,7 +73,7 @@ export default function CreateProject(){
                                 <b>Name:</b>
                             </div>
                             <div className='col-md-6'>
-                                <input className="form-control" type={"text"}></input>
+                                <input className="form-control" ref={name} placeholder="enter the project name" type={"text"}></input>
                             </div>
                         </div>
 
@@ -47,12 +82,43 @@ export default function CreateProject(){
                                 <b>Description:</b>
                             </div>
                             <div className='col-md-6'>
-                                <textarea className="form-control" rows={4} ></textarea>
+                                <textarea ref={description} placeholder="enter the description" className="form-control" rows={4} ></textarea>
                             </div>
                         </div>
+                <div className="row d-flex justify-content-center my-4">
+
+                <div className='col-md-3'>
+                <b htmlFor="skills">Skills:</b>
+                </div>
+                <div className="col-md-6">
+                <div className="input-group mb-3">
+                    <select
+                    className="form-control"
+                    id="skillSelect"
+                    onChange={handleSkillAdd}
+                    >
+                    <option defaultValue="">-- Select a skill --</option>
+                    {skillsets.map((item,key)=>{
+                        return <option key={key} value={key}>{item}</option>
+                    })}
+                    </select>
+                </div>
+                <div className="skills-list">
+                    {skills.map((skill, index) => (
+                    <span
+                        key={index}
+                    className="badge badge-secondary mr-2"
+                     onClick={() => handleSkillRemove(skill)}
+                    >
+                        {skillsets[skill]} &times;
+                    </span>
+                    ))}
+                </div>
+                </div>
+                </div>
                         <div className="row d-flex  justify-content-center">
                             <div className="col-md-3">
-                            <div className="btn shadow bg-primary " data-toggle="modal" data-target="#projectCreateModal">
+                            <div className="btn shadow bg-primary"  data-toggle="modal" data-target="#projectCreateModal">
                                         <div className="card-body text-center text-white">
                                         Create project
                                         </div>

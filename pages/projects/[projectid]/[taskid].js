@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useMoralis,useWeb3Contract } from "react-moralis";
 import { abi,addresses,BUSDabi } from "@/constants";
 import { useRouter } from "next/router";
@@ -25,6 +25,13 @@ export default function SubmitWork(){
         ]
     }
     const code = useRef(" ");
+
+    useEffect(()=>{
+        fetch("http://localhost:5000/projects/:walletID").then((res)=>{
+            if(res.status!=200) throw new Error(res.json().message);
+            console.log(res)
+        }).catch((e)=>console.log(e.message))
+    },[])
     const submit = async ()=>{
         try{
             const provider = new ethers.providers.Web3Provider(window.ethereum);

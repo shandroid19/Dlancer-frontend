@@ -32,7 +32,6 @@ useEffect(()=>{
     fetch('http://localhost:5000/api/users/'+account).then((res)=>{
         return res.json();
     }).then((res)=>{
-        console.log(res)
         setData(res)
         setSkills(res.skills)
     }).catch((e)=>{
@@ -44,7 +43,6 @@ useEffect(()=>{
   fetch('http://localhost:5000/api/users/certs/'+account).then((res)=>{
       return res.json();
   }).then((res)=>{
-      console.log(res)
       setCertlist(res)
   }).catch((e)=>{
       console.error(e);
@@ -55,7 +53,6 @@ useEffect(()=>{
   fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
       return res.json();
   }).then((res)=>{
-      console.log(res)
       setProjects(res)
   }).catch((e)=>{
       console.error(e);
@@ -80,16 +77,16 @@ const {account} = useMoralis();
 const accountprojects = [{id:1,title:"Todo app"},{id:2,title:"Self balancing robot"},{id:3,title:"gyroscope"}];
 
 const projectlist = projects.map((project,key)=>{
-    return <div className='row my-3'>
-      <div className='col-12'><ProjectCard key={key} project ={project}/></div>
+    return <div className='row my-3' key={key}>
+      <div className='col-12'><ProjectCard  project ={project}/></div>
       {/* <ProjectCard key={key} tasks={project.tasks} title = {project.title} status = {project.status} /> */}
       {/* <Project key={key} tasks={project.tasks} title={project.title} status={project.status}/> */}
       </div>
 })
 
 const certificatelist = certlist.map((cert,key)=>{
-    return <div className='row my-3'>
-      <Certificate key={key} currentuser={data.walletID} id={cert._id} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
+    return <div className='row my-3' key={key}>
+      <Certificate  currentuser={data.walletID} id={cert._id} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
       </div>
 })
 
