@@ -2,17 +2,20 @@ import { useRef } from "react";
 import {useWeb3Contract,useMoralis} from 'react-moralis'
 import { abi,addresses,BUSDabi } from "@/constants";
 import { ethers } from "ethers";
+import { useRouter } from "next/router";
 export default function AddTask(){
     const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
+    const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
     const testCases = useRef([]);
-    const contributor = useRef("");
+    const freelancer = useRef("");
     const reward = useRef("");
     const timelimit = useRef(0);
     const {chainId:chainIdhex} = useMoralis();
     const chainId = parseInt(chainIdhex);
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
+    const router = useRouter();
     const {runContractFunction:activateTask} = useWeb3Contract(
         {
             abi:abi,
@@ -27,7 +30,19 @@ export default function AddTask(){
     )
 
         const onActivate = async ()=>{
-        
+            const reqObj = {name:taskname.current.value,description:description.current.value,deadline:timelimit.current.value,employer:account,employee:freelancer.current.value,amount:reward.current.value}
+            console.log(reqObj)
+            fetch('http://localhost:5000/api/tasks/',{
+                method:'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify(reqObj)
+            }).then((res)=>{
+                return res.json();
+            }).then((res)=>{
+                console.log('contract address is '+res.address);
+                return res.address;
+            }).then(async(contractAddress)=>{
+
             try {
                 //after deploying the contract on the backend, execute below functions using contractAddress obtained from serverside
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -35,12 +50,30 @@ export default function AddTask(){
                 const taskContract = new ethers.Contract(contractAddress, abi, signer);
                 const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
                 // const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000") );
-                const tx = await taskContract.activateTask();
+                // const tx = await taskContract.activateTask();
                 const result = await taskContract.isActivated();
                 console.log(result)
+
+                fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
+                method:'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify({contractAddress:contractAddress,employee:freelancer.current.value})
+                }).then((res)=>{
+                    if(res.status!=200) throw new Error("could not activate task")
+                    return res.json();
+                }).then((res)=>{
+                    console.log("Task successfully created");
+                }).catch((e)=>{console.error(e)})
+
             } catch (error) {
                 console.error(error);
             }
+
+                
+            }).catch((e)=>{
+                console.error(e)
+            })
+       
         }
    
 
@@ -86,19 +119,19 @@ export default function AddTask(){
                     </div>
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
-                        <div className="col-sm-4"><input ref={timelimit} type="number" placeholder="in hrs" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={timelimit} min={1} type="number" placeholder="in hrs" className="form-control"/></div>
                         
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Reward</label>
                         <div className="col-sm-4"><input ref={reward} type="text" placeholder="in ETH" className="form-control"/></div>
                     </div>
                     <div className="form-group row my-3">
-                    <label htmlFor="contributor" ref={contributor} className="col-sm-2 col-form-label">Contributor</label>
+                    <label htmlFor="contributor"  className="col-sm-2 col-form-label">freelancer</label>
                         <div className="col-sm-4">
-                        <select className="form-control my-1 mr-sm-2" >
-                            <option defaultValue="0xFABB0ac9d68B0B445fB7357272Ff202C5651694a">Admin</option>
-                            <option value="0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec">employee</option>
+                        <select ref={freelancer} className="form-control my-1 mr-sm-2" >
+                            <option value="0xB45C57b446C82d93f5c4282eE8A47Ca149A4b042">Admin</option>
+                            <option value="0x66A296555bD0750635e8C3A8168Ed64d928E577a">employee</option>
                             <option value="0x89E2Da7cAC0360e7796722bA47b40c46A9CFEF39">testnet</option>
-                            <option value="0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097">owner</option>
+                            <option value="0xb2bf46A95dCfd3B3Cc42A5BF7649378dd07c4fbD">owner</option>
                         </select>
                         </div>
                     </div>

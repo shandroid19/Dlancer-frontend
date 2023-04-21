@@ -9,5 +9,4 @@ done:
     projects display in /projects (using api/projects)
     projects posting in /projects/create (using api/projects/:walletid)
     project data get in /projects/projectID (using projects/:projectid)
-next:
-    user profile data fetch
+    create task post in /projects/projectID/addtask (using tasks/) 
