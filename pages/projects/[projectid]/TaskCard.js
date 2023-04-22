@@ -1,12 +1,23 @@
 import Link from "next/link"
+import { useMoralis, useWeb3Contract } from "react-moralis"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { abi,addresses} from "@/constants";
+import { ethers } from "ethers";
 
 export default function TaskCard({task,projectid,usermode}){
     const router = useRouter();
     const [data, setData] = useState(null);
-
-
+    const {chainId:chainIdhex,isWeb3Enabled} = useMoralis();
+    const chainId = parseInt(chainIdhex);
+    const {runContractFunction:getValues} = useWeb3Contract(
+        {
+            abi:abi,
+            contractAddress:task.contractAddress,
+            functionName:"getValues",
+            chainId:chainId,
+        }
+    )
     const handleDelete = ()=>{
         fetch('http://localhost:5000/api/tasks/'+projectid+'?taskid='+task._id,{method:'DELETE'}).then((res)=>{
             if(res.status!=200) throw new Error(res.json().message);
@@ -16,21 +27,39 @@ export default function TaskCard({task,projectid,usermode}){
         })
     }
     
-    const handleView = ()=>{
-        fetch('http://localhost:5000/api/tasks/',).then((res)=>{
-            if(res.status!=200) throw new Error(res.json().message);
-            return res.json();
-        })
-        .then((res)=>{
-            if (res.title && res.description) {
-                setData(res);
-              } else {
-                throw new Error("Title and description not found");
-              }
-        })
-        .catch((e)=>{
-            console.error(e);
-        })
+    const handleView = async()=>{
+        // fetch('http://localhost:5000/api/tasks/',).then((res)=>{
+        //     if(res.status!=200) throw new Error(res.json().message);
+        //     return res.json();
+        // })
+        // .then((res)=>{
+        //     if (res.title && res.description) {
+        //         setData(res);
+        //       } else {
+        //         throw new Error("Title and description not found");
+        //       }
+        // })
+        // .catch((e)=>{
+        //     console.error(e);
+        // })
+        // const provider = ethers.getDefaultProvider();
+        // const taskContract = new ethers.Contract(task.contractAddress, abi,provider);
+        // console.log(taskContract)
+        try{
+           const arraydata = await getValues();
+           const resObj = {
+            title:arraydata[0],
+            description:arraydata[1],
+            employee:arraydata[2],
+            reward:ethers.utils.formatEther(arraydata[3]),
+            deadline:arraydata[4].toString(),
+            cancelled:arraydata[5],
+            completed:arraydata[6]    
+            }
+            setData(resObj);
+        }catch(e) {
+            console.error(e.message)
+        }
     }
 
   
@@ -87,7 +116,7 @@ export default function TaskCard({task,projectid,usermode}){
                     Freelancer:
                 </div>
                 <div className="col-sm-8">
-                    {data?.employee}
+                {data?.employee.slice(0,6)}...{data?.employee.slice(data?.employee.length-4)}
                 </div>
             </div>
             <div className="row">
@@ -95,7 +124,7 @@ export default function TaskCard({task,projectid,usermode}){
                     reward:
                 </div>
                 <div className="col-sm-8">
-                    {data?.reward} ETH
+                    {data?.reward} USD
                 </div>
             </div>
             <div className="row">
