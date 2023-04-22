@@ -51,9 +51,10 @@ useEffect(()=>{
 },[])
 
 useEffect(()=>{
-  fetch('http://localhost:5000/api/projects?walletID='+router.query.userid).then((res)=>{
+  fetch('http://localhost:5000/api/projects/otherprojects?walletID='+router.query.userid).then((res)=>{
       return res.json();
   }).then((res)=>{
+    console.log(res)
       setProjects(res)
   }).catch((e)=>{
       console.error(e);

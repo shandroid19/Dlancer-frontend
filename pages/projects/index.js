@@ -23,7 +23,6 @@ export default function ProjectsPage(){
     fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
         return res.json();
     }).then((res)=>{
-        console.log(res)
         setOwnedProjects(res)
     }).catch((e)=>{
         console.error(e);
@@ -35,7 +34,7 @@ export default function ProjectsPage(){
         return res.json();
     }).then((res)=>{
         console.log(res)
-        setOtherProjects(res.tasksAssigned)
+        setOtherProjects(res)
     }).catch((e)=>{
         console.error(e);
     })
@@ -61,10 +60,11 @@ export default function ProjectsPage(){
                 </div>
             </div>
             <div className="row d-flex justify-content-center my-5">
-                <div className="col-sm-6 d-flex justify-content-center"><h3>Assigned projects</h3></div>
+                <div className="col-sm-6 d-flex justify-content-center"><h3>Assigned tasks</h3></div>
             </div>
             <div className="container p-5 bg-light">
-                <ProjectList data={otherProjects} mode={false}/>
+                {/* <ProjectList data={otherProjects} mode={false}/> */}
+                <TaskList tasks={otherProjects} usermode={0} projectid={null}/>
             </div>
         </div>
         
