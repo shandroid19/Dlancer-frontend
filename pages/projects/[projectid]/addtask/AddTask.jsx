@@ -57,12 +57,13 @@ export default function AddTask(){
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:JSON.stringify({contractAddress:contractAddress,employee:freelancer.current.value})
+                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value})
                 }).then((res)=>{
                     if(res.status!=200) throw new Error("could not activate task")
                     return res.json();
                 }).then((res)=>{
                     console.log("Task successfully created");
+                    router.back()
                 }).catch((e)=>{console.error(e)})
 
             } catch (error) {
@@ -140,7 +141,7 @@ export default function AddTask(){
                         <button className="btn btn-primary" onClick={async()=>await onActivate()}>Create</button>
                         </div>
                         <div className="col-sm-1">
-                        <button className="btn btn-danger ">Cancel</button>
+                        <button className="btn btn-danger" onClick={()=>router.back()}>Cancel</button>
                         </div>
                     </div>
                 </div>
