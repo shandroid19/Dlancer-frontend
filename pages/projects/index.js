@@ -18,6 +18,7 @@ import { useState,useEffect } from "react"
 export default function ProjectsPage(){
     const {account}=useMoralis();
     const [ ownedProjects, setOwnedProjects ] = useState([]);   
+    const [ otherProjects, setOtherProjects ] = useState([]);   
     useEffect(()=>{
     fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
         return res.json();
@@ -28,11 +29,22 @@ export default function ProjectsPage(){
         console.error(e);
     })
   },[])
+
+  useEffect(()=>{
+    fetch('http://localhost:5000/api/projects/other?walletID='+account).then((res)=>{
+        return res.json();
+    }).then((res)=>{
+        console.log(res)
+        setOtherProjects(res.tasksAssigned)
+    }).catch((e)=>{
+        console.error(e);
+    })
+  },[])
     return <>
         <Header/>
         <div className="container my-5">
             <div className="row d-flex justify-content-center my-5">
-                <div className="col-sm-6 d-flex justify-content-center"><h3>Assigned Projects</h3></div>
+                <div className="col-sm-6 d-flex justify-content-center"><h3>Your Projects</h3></div>
             </div>
             <div className="container p-5 bg-light">
                 <ProjectList data={ownedProjects} mode={true}/>
@@ -49,10 +61,10 @@ export default function ProjectsPage(){
                 </div>
             </div>
             <div className="row d-flex justify-content-center my-5">
-                <div className="col-sm-6 d-flex justify-content-center"><h3>Your projects</h3></div>
+                <div className="col-sm-6 d-flex justify-content-center"><h3>Assigned projects</h3></div>
             </div>
             <div className="container p-5 bg-light">
-                <ProjectList data={ownedProjects} mode={false}/>
+                <ProjectList data={otherProjects} mode={false}/>
             </div>
         </div>
         

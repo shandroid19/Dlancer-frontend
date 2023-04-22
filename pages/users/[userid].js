@@ -5,6 +5,7 @@ import styles from '../../styles/Users.module.css'
 import Certificate from './Certificate';
 import ProjectCard from '../search/ProjectCard';
 import { skillsets } from '@/constants';
+import { useRouter } from 'next/router';
 export default function Profile(){
     const [skills, setSkills] = useState([]);
     const [certlist,setCertlist] = useState([])
@@ -17,7 +18,7 @@ export default function Profile(){
     const username = useRef("");
     const bio = useRef("");
     const location = useRef("");
-
+    const router= useRouter();
     const imgurl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
     const [data,setData] = useState(
       {username:"employee",walletID:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
@@ -29,7 +30,7 @@ export default function Profile(){
       email:"employee@gmail.com"
 });
 useEffect(()=>{
-    fetch('http://localhost:5000/api/users/'+account).then((res)=>{
+    fetch('http://localhost:5000/api/users/'+router.query.userid).then((res)=>{
         return res.json();
     }).then((res)=>{
         setData(res)
@@ -40,7 +41,7 @@ useEffect(()=>{
 },[])
 
 useEffect(()=>{
-  fetch('http://localhost:5000/api/users/certs/'+account).then((res)=>{
+  fetch('http://localhost:5000/api/users/certs/'+router.query.userid).then((res)=>{
       return res.json();
   }).then((res)=>{
       setCertlist(res)
@@ -50,7 +51,7 @@ useEffect(()=>{
 },[])
 
 useEffect(()=>{
-  fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
+  fetch('http://localhost:5000/api/projects?walletID='+router.query.userid).then((res)=>{
       return res.json();
   }).then((res)=>{
       setProjects(res)
@@ -124,6 +125,7 @@ const handleAddCertificate = ()=>{
 
 
   const handleSave = ()=>{
+    console.log(router)
     // console.log(email.current.value,username.current.value, location.current.value, bio.current.value, skills);
     fetch('http://localhost:5000/api/users/edit/'+account, {
   method: 'POST',
@@ -278,7 +280,7 @@ const displayprofile =  <div className="container">
                             <b>Task completed:</b>
                         </div>
                         <div className='col-6'>
-                            {data.tasksAssigned}
+                            {data.tasksAssigned?.length}
                         </div>
                     </div>
                     <div className='row my-2'>
@@ -299,7 +301,7 @@ const displayprofile =  <div className="container">
                         })}
                         </div>
                     </div>
-
+{console.log(account?.toLowerCase()==data.walletID.toLowerCase())}
                         {account?.toLowerCase()==data.walletID.toLowerCase()?
                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
                         Edit profile
@@ -418,13 +420,13 @@ const displayprofile =  <div className="container">
                 <div className='row'>
                     <div style={{height:'70vh',overflowY:'scroll'}} className='container bg-secondary p-sm-5'>
                         {certificatelist}
-                        <div className='row my-2 justify-content-center d-flex'>
+                        {router.query.userid.toLowerCase()==account?<div className='row my-2 justify-content-center d-flex'>
                           <div className='col-sm-6 justify-content-center d-flex'>
                             <button className='btn btn-primary'  data-toggle="modal" data-target="#certificateModal">
                               Add certificate
                             </button>
                           </div>
-                        </div>
+                        </div>:<></>}
                     </div>
                 </div>
                 </div>
