@@ -1,17 +1,24 @@
 import User from "./User";
 import { useState,useEffect } from "react";
 import { skillsets } from "@/constants";
+import { useMoralis } from "react-moralis";
 
 export default function Users(){
     const image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
-    const [data,setData] = useState([]
-  //     [
-  //     {username:"employee",id:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",bio:"hardworker",skills:[0,1,2,3],tasks:"5/9",image:image},
-  //     {username:"shandroid",id:"0xFABB0ac9d68B0B445fB7357272Ff202C5651694a",bio:"hardworker",skills:[1,2,3,4,5],tasks:"5/9",image:image},
-  //     {username:"owner",id:"0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097",bio:"hardworker",skills:[10,12,15,16],tasks:"5/9",image:image}
-  // ]
-  )
-  
+    const [data,setData] = useState([])
+    const [tasks,setTasks] = useState([])
+    const [projects,setProjects] = useState([])
+    const {account} = useMoralis();
+    useEffect(()=>{
+      fetch('http://localhost:5000/api/users/getfilters/'+account).then((res)=>{
+        return res.json(); 
+      }).then((res)=>{
+        setTasks(res.tasks)
+        setProjects(res.projects);
+        // setData(res)
+      }).catch((e)=>console.log(e))
+    },[]) 
+
 
     useEffect(()=>{
       fetch('http://localhost:5000/api/users/').then((res)=>{
@@ -22,7 +29,19 @@ export default function Users(){
         // setData(res)
       }).catch((e)=>console.log(e))
     },[]) 
-
+    
+    
+    const handleProject = (e)=>{
+      if(e.target.value==0) return;
+      fetch('http://localhost:5000/api/tasks/recommendprojects/'+e.target.value).then((res)=>{
+        return res.json(); 
+      }).then((res)=>{
+        console.log(res)
+        setData(res);
+        // setData(res)
+        // setData(res)
+      }).catch((e)=>console.log(e))
+    }
 
     const [filterText, setFilterText] = useState("");
 
@@ -58,6 +77,18 @@ export default function Users(){
         <div className="row d-flex justify-content-center">
           <div className="col-sm-4">
             <input type="text" placeholder="Search..." className="form-control" value={filterText} onChange={handleFilterChange} />
+          </div>
+          <div className="col-sm-4">
+          <select
+            className="form-control"
+            // id="skillSelect"
+            onChange={handleProject}
+            >
+          <option value={0}>select project of task</option>
+            {projects.map((item,key)=>{
+                return <option key={key} value={item._id}>{item.projectName}</option>
+            })}
+          </select>          
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {useWeb3Contract,useMoralis} from 'react-moralis'
 import { abi,addresses,BUSDabi } from "@/constants";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import { skillsets } from "@/constants";
 export default function AddTask(){
     const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
     const {account} = useMoralis();
@@ -16,6 +17,32 @@ export default function AddTask(){
     const chainId = parseInt(chainIdhex);
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const router = useRouter();
+    const [skills, setSkills] = useState([]);
+    const [collaborators,setCollaborators] = useState([]);
+
+    useEffect(()=>{
+        // router.query.projectid
+        console.log(router.query.projectid)
+        fetch('http://localhost:5000/api/tasks/collaborators?projectid='+router.query.projectid).then((res)=>{
+            return res.json();
+        }).then((res)=>{
+            setCollaborators(res);
+        })
+    },[])
+
+    const handleSkillAdd = (e) => {
+        const selectedSkill = e.target.value;
+        if (!skills.includes(selectedSkill)) {
+          setSkills([...skills, selectedSkill]);
+        }    
+      }
+      
+    const handleSkillRemove = (skill) => {
+        setSkills(skills.filter((s) => s !== skill))
+      }
+
+    
+      
     const {runContractFunction:activateTask} = useWeb3Contract(
         {
             abi:abi,
@@ -57,7 +84,7 @@ export default function AddTask(){
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value})
+                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,requiredSkills:skills})
                 }).then((res)=>{
                     if(res.status!=200) throw new Error("could not activate task")
                     return res.json();
@@ -136,6 +163,39 @@ export default function AddTask(){
                         </select>
                         </div>
                     </div>
+                    <div className='form-group row my-2'>
+                    <label htmlFor="skills" className="col-sm-2 col-form-label">Skills</label>
+
+                        <div className='col-sm-4'>
+      
+                    <div className="input-group mb-3">
+                        <select
+                        className="form-control"
+                        id="skillSelect"
+                        onChange={handleSkillAdd}
+                        >
+                            <option defaultValue="">-- Select a skill --</option>
+                            {skillsets.map((item,key)=>{
+                                return <option key={key} value={key}>{item}</option>
+                            })}
+                        </select>
+                    </div>
+                
+                    <div className="skills-list">
+                    {skills.map((skill, index) => (
+                    <span
+                        key={index}
+                        className="badge badge-secondary mr-2"
+                        onClick={() => handleSkillRemove(skill)}
+                    >
+                        {skillsets[skill]} &times;
+                    </span>
+                    ))}
+             </div>
+    
+             </div>
+            </div>
+
                     <div className = "form-group row my-3 d-flex flex-row-reverse">
                         <div className="col-sm-1">
                         <button className="btn btn-primary" onClick={async()=>await onActivate()}>Create</button>

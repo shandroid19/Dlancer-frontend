@@ -38,7 +38,7 @@ export default function ProjectCard({project}){
                                     <b>Skills:</b>
                                 </div>
                                 <div className="col-sm-6" style={{overflowY:'scroll',maxHeight:'6rem'}}>
-                {project.requiredSkills.slice(0, 3).map((skill, key) => {
+                {project?.requiredSkills?.slice(0, 3).map((skill, key) => {
                 return (
                 <span key={key} className="badge bg-secondary">
              {skillsets[skill]}
@@ -53,7 +53,7 @@ export default function ProjectCard({project}){
                         </span>
                     );
                     })}
-                {project.requiredSkills.length > 3 && (
+                {project?.requiredSkills?.length > 3 && (
                 <a href="#" className="d-block" onClick={() => setShowMoreSkills(!showMoreSkills)}>
                     {showMoreSkills ? "See less" : "See more"}
             </a>
