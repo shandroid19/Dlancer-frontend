@@ -421,7 +421,7 @@ const displayprofile =  <div className="container">
                 <div className='row'>
                     <div style={{height:'70vh',overflowY:'scroll'}} className='container bg-secondary p-sm-5'>
                         {certificatelist}
-                        {router.query.userid.toLowerCase()==account?<div className='row my-2 justify-content-center d-flex'>
+                        {router.query.userid?.toLowerCase()==account?<div className='row my-2 justify-content-center d-flex'>
                           <div className='col-sm-6 justify-content-center d-flex'>
                             <button className='btn btn-primary'  data-toggle="modal" data-target="#certificateModal">
                               Add certificate

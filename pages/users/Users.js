@@ -38,8 +38,22 @@ export default function Users(){
       }).then((res)=>{
         console.log(res)
         setData(res);
+        document.getElementById("taskselect").text=0;
+        document.getElementById("taskselect").value=0;
         // setData(res)
         // setData(res)
+      }).catch((e)=>console.log(e))
+    }
+
+    const handleTask = (e)=>{
+      if(e.target.value==0) return;
+      fetch('http://localhost:5000/api/tasks/recommendtasks/'+e.target.value).then((res)=>{
+        return res.json(); 
+      }).then((res)=>{
+        console.log(res)
+        setData(res);
+        document.getElementById("projectselect").text=0;
+        document.getElementById("projectselect").value=0;
       }).catch((e)=>console.log(e))
     }
 
@@ -80,15 +94,32 @@ export default function Users(){
           </div>
           <div className="col-sm-4">
           <select
+            id="projectselect"
+
             className="form-control"
             // id="skillSelect"
             onChange={handleProject}
             >
-          <option value={0}>select project of task</option>
-            {projects.map((item,key)=>{
+          <option value={0}>select project</option>
+            {projects?.map((item,key)=>{
                 return <option key={key} value={item._id}>{item.projectName}</option>
             })}
-          </select>          
+
+          </select>    
+
+          <select
+            id="taskselect"
+            className="form-control"
+            // id="skillSelect"
+            onChange={handleTask}
+            >
+          <option value={0}>select task</option>
+            {tasks?.map((item,key)=>{
+              console.log(item)
+                return <option key={key} value={item.taskId}>{item.taskName}</option>
+            })}
+
+          </select>   
           </div>
         </div>
       </div>
