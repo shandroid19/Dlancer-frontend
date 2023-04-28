@@ -24,7 +24,6 @@ export default function Users(){
       fetch('http://localhost:5000/api/users/').then((res)=>{
         return res.json(); 
       }).then((res)=>{
-        console.log(res)
         setData(res)
         // setData(res)
       }).catch((e)=>console.log(e))
@@ -36,7 +35,6 @@ export default function Users(){
       fetch('http://localhost:5000/api/tasks/recommendprojects/'+e.target.value).then((res)=>{
         return res.json(); 
       }).then((res)=>{
-        console.log(res)
         setData(res);
         document.getElementById("taskselect").text=0;
         document.getElementById("taskselect").value=0;
@@ -115,7 +113,6 @@ export default function Users(){
             >
           <option value={0}>select task</option>
             {tasks?.map((item,key)=>{
-              console.log(item)
                 return <option key={key} value={item.taskId}>{item.taskName}</option>
             })}
 

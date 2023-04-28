@@ -37,7 +37,12 @@ export default function SubmitWork(){
     )
 
     const onCancel = async ()=>{
-        await cancelTask();
+        try{
+            await cancelTask();
+        }
+        catch(e){
+            console.error(e)
+        }
     }
 
 

@@ -10,6 +10,7 @@ export default function Profile(){
     const [skills, setSkills] = useState([]);
     const [certlist,setCertlist] = useState([])
     const [projects,setProjects] = useState([])
+    const [ownProjects,setOwnProjects] = useState([])
     const [edit,setEdit] = useState(false);
     const [newtitle,setTitle] = useState('');
     const [neworg,setOrg] = useState('');
@@ -35,6 +36,7 @@ useEffect(()=>{
     }).then((res)=>{
         setData(res)
         setSkills(res.skills)
+        setOwnProjects(res.projects)
     }).catch((e)=>{
         console.error(e);
     })
@@ -93,7 +95,16 @@ const certificatelist = certlist.map((cert,key)=>{
 })
 
 const invite = ()=>{
-    console.log("invite for project id",inviteproject.current.value,"sent to user",account)
+    fetch('http://localhost:5000/api/req',{
+                method:'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify({initiatorId:account,resolverId:data._id,projectId:inviteproject.current.value})
+                })
+    .then((res)=>{return res.json()})
+    .then((res)=>{if(res.status==200 || 204) console.log(res); else throw new Error(res.message); alert("Invite sent successfully")})
+    .catch((e)=>console.error(e))
+    // {initiatorId (userid), resolverId (userid), projectId}
+    console.log("invite for project id",inviteproject.current.value,"sent to user",account,data)
 }
 
 const handleSkillAdd = (e) => {
@@ -307,7 +318,7 @@ const displayprofile =  <div className="container">
                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
                         Edit profile
                     </div>:
-                        <div className="btn shadow bg-primary text-center text-white " data-toggle="modal" data-target="#projectInviteModal">
+                        <div className="btn shadow bg-primary text-center text-white" data-toggle="modal" data-target="#projectInviteModal">
                             Invite for collaboration
                         </div>
                         
@@ -345,8 +356,8 @@ const displayprofile =  <div className="container">
                 </div>
                 <div className='col-sm-9 col-md-10'>
                     <select ref = {inviteproject} className="form-control my-1 mr-sm-2" >
-                        {accountprojects.map((item,key)=>{
-                            return <option key={key} value={item.id}>{item.title}</option>
+                        {ownProjects.map((item,key)=>{
+                            return <option key={key} value={item._id}>{item.projectName}</option>
                         })}
                     </select> 
                 </div>
@@ -355,7 +366,7 @@ const displayprofile =  <div className="container">
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-danger" data-dismiss="modal">Close</button>
-        <button type="button" className="btn btn-success" onClick={invite}>Invite</button>
+        <button type="button" className="btn btn-success" data-dismiss="modal" onClick={invite}>Invite</button>
       </div>
     </div>
     </div>
