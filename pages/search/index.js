@@ -1,17 +1,22 @@
 import Header from "@/components/Header";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ProjectCard from "./ProjectCard";
+import { useERC20Balances } from "react-moralis";
 
-const data = [
-  {id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
-  {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
-  {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},
-]
+// const data = [
+//   {id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
+//   {id:2,title:"website",collaborators:2,tasks:6,status:0,skills:["react.js","python"]},
+//   {id:3,title:"application",collaborators:2,tasks:5,status:1,skills:["flutter","js"]},
+// ]
+
+
+
 
 function ProjectList({data, filterText}) {
+  console.log(data)
   const filteredData = data.filter((project) => {
-    const titleMatch = project.title.toLowerCase().includes(filterText.toLowerCase());
-    const skillsMatch = project.skills.some((skill) => skill.toLowerCase().includes(filterText.toLowerCase()));
+    const titleMatch = project.projectName.toLowerCase().includes(filterText.toLowerCase());
+    const skillsMatch = project.requiredSkills.some((skill) => skill.toLowerCase().includes(filterText.toLowerCase()));
     return titleMatch || skillsMatch;
   });
 
@@ -22,10 +27,24 @@ function ProjectList({data, filterText}) {
 }
 
 export default function SearchProjects() {
+ 
   const [filterText, setFilterText] = useState("");
+  const [data,setData] = useState([]);
+  useEffect(()=>{
+    fetch('http://localhost:5000/api/projects/').then((res)=>{
+      if(res.status!=200)
+        throw new Error(res.json().message);
+      return res.json();
+    }).then((res)=>{
+      setData(res);
+    }) 
+  },[])
+
   const handleFilterChange = (event) => {
     setFilterText(event.target.value);
   };
+
+
   return (
     <>
       <Header />

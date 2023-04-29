@@ -22,26 +22,49 @@ export default function Requests(){
         }).catch((e)=>console.log(e))
     },[])
 
+    const handleRequest = async(requestid,result)=>{
+        fetch('http://localhost:5000/api/req/handle',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                requestId:requestid,
+                resolverId:account,
+                result:result
+            })
+        }).then((res)=>{
+            if(res.status!=200) throw new Error(res.json().message);
+            return res.json();
+        }).then((res)=>{
+            window.location.reload();
+            console.log(res);
+        }).catch((e)=>console.error(e))
+    }
+
     const requestlist = requests.map((request)=>{
         const {mode,_doc,username,walletID} = request;
         const projectid = _doc.project._id;
         const project = _doc.project.projectName;
         const userid = _doc.user;
+        const requestid = _doc._id
+        console.log(request)
         return <div className="row d-flex align-items-center ">
             <div className="col-sm-8">
             <Link href = {mode?`/projects/${project}`:`/users/${userid}`}>
                 <div className="card-body text-center">
-                    {!mode?<p><Link href={`users/${walletID}`}>{username}</Link> has invited you to contribute to the project "{project}"</p>:<p>{username} has sent a request to contribute to the project {project}</p>}
+                    {!mode?<><Link href={`users/${walletID}`}>{username}</Link><> has invited you to contribute to the project "{project}"</></>:<><Link href={`users/${walletID}`}>{username}</Link> has sent a request to contribute to the project {project}</>}
                 </div>
             </Link>
             </div>
             <div className="col-sm-2  col-6 d-flex justify-content-center">
-                <button className="btn btn-primary">
+                
+                <button className="btn btn-primary" onClick={async ()=> await handleRequest(requestid,true)}>
                 Accept
                 </button>
             </div>
             <div className="col-sm-2  col-6 d-flex justify-content-center">
-                <button className="btn btn-danger">
+                <button className="btn btn-danger" onClick={async ()=> await handleRequest(requestid,false)}>
                 Reject
                 </button>
             </div>

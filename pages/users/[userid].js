@@ -110,7 +110,8 @@ const invite = ()=>{
                 body:JSON.stringify({initiatorId:account,resolverId:data._id,projectId:inviteproject.current.value})
                 })
     .then((res)=>{return res.json()})
-    .then((res)=>{if(res.status==200 || 204) console.log(res); else throw new Error(res.message); alert("Invite sent successfully")})
+    .then((res)=>{if(res.status==200 || 204) console.log(res); else throw new Error(res.message);
+       alert(res.message)})
     .catch((e)=>console.error(e))
     // {initiatorId (userid), resolverId (userid), projectId}
     console.log("invite for project id",inviteproject.current.value,"sent to user",account,data)
