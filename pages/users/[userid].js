@@ -36,10 +36,19 @@ useEffect(()=>{
     }).then((res)=>{
         setData(res)
         setSkills(res.skills)
-        setOwnProjects(res.projects)
     }).catch((e)=>{
         console.error(e);
     })
+},[])
+
+useEffect(()=>{
+  fetch('http://localhost:5000/api/projects?walletID='+account).then((res)=>{
+      return res.json();
+  }).then((res)=>{
+      setOwnProjects(res);
+  }).catch((e)=>{
+      console.error(e);
+  })
 },[])
 
 useEffect(()=>{
@@ -318,9 +327,10 @@ const displayprofile =  <div className="container">
                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
                         Edit profile
                     </div>:
+                        ownProjects.length?
                         <div className="btn shadow bg-primary text-center text-white" data-toggle="modal" data-target="#projectInviteModal">
                             Invite for collaboration
-                        </div>
+                        </div>:<></>
                         
                         }
 
