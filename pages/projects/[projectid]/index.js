@@ -37,6 +37,15 @@ export default function Project(){
     },[])
 
     const request = ()=>{
+        fetch('http://localhost:5000/api/req',{
+                method:'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify({initiatorId:account,resolverId:project.ownerID,projectId:project._id})
+                })
+        .then((res)=>{return res.json()})
+        .then((res)=>{if(res.status==200 || 204) console.log(res); else throw new Error(res.message);
+         alert(res.message)})
+            .catch((e)=>console.error(e))
         console.log("request for collaboration from account:",account)
     }
 
@@ -57,7 +66,7 @@ export default function Project(){
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-danger" data-dismiss="modal">No</button>
-        <button type="button" className="btn btn-success" onClick={request}>Yes</button>
+        <button type="button" className="btn btn-success" data-dismiss="modal" onClick={request}>Yes</button>
       </div>
     </div>
     </div>
@@ -93,6 +102,13 @@ export default function Project(){
             </div>
             <div className="row d-flex justify-content-center">
                 <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid}/>
+            </div>
+            <div className="row d-flex justify-content-center">
+                <div className="col d-flex justify-content-center">
+                <button className="btn btn-primary" data-toggle="modal" data-target="#projectRequestModal">
+                    Request to join
+                </button>
+                </div>
             </div>
         </div>
         
