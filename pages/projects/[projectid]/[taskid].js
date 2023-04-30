@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
-import { useRef } from "react";
-import { useMoralis,useWeb3Contract } from "react-moralis";
+import { useEffect, useRef, useState } from "react";
+import { useERC20Balances, useMoralis,useWeb3Contract } from "react-moralis";
 import { abi,addresses,BUSDabi } from "@/constants";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
@@ -13,18 +13,48 @@ export default function SubmitWork(){
     const router= useRouter();
     const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
     const params = router.query;
-    const task = {
-        name:"Todo List",
-        description:"Develop a todo list which has the following features",
-        deadline:8,
-        reward:7,
-        testcases: [
-            {input:"shan",output:"Hey my name is shan"},
-            {input:"sasuke",output:"Hey my name is sasuke"},
-            {input:"naruto",output:"Hey my name is naruto"},
-        ]
-    }
+    const [task,setTask] = useState({})
+    // const task = {
+    //     name:"Todo List",
+    //     description:"Develop a todo list which has the following features",
+    //     deadline:8,
+    //     reward:7,
+    //     testcases: [
+    //         {input:"shan",output:"Hey my name is shan"},
+    //         {input:"sasuke",output:"Hey my name is sasuke"},
+    //         {input:"naruto",output:"Hey my name is naruto"},
+    //     ]
+    // }
     const code = useRef(" ");
+
+    const {runContractFunction:getValues} = useWeb3Contract(
+        {
+            abi:abi,
+            contractAddress:task.contractAddress,
+            functionName:"getValues",
+            chainId:chainId,
+        }
+    )
+
+
+    useEffect(async ()=>{
+        try{
+            const arraydata = await getValues();
+            const resObj = {
+             title:arraydata[0],
+             description:arraydata[1],
+             employee:arraydata[2],
+             reward:ethers.utils.formatEther(arraydata[3]),
+             deadline:arraydata[4].toString(),
+             cancelled:arraydata[5],
+             completed:arraydata[6]    
+             }
+             setData(resObj);
+         }catch(e) {
+             console.error(e.message)
+         }
+    },[])
+
     const submit = async ()=>{
         try{
             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -37,6 +67,15 @@ export default function SubmitWork(){
             console.log(e)
         }
     }
+
+    const handleDelete = ()=>{
+        fetch('http://localhost:5000/api/tasks/'+projectid+'?taskid='+task._id,{method:'DELETE'}).then((res)=>{
+            if(res.status!=200) throw new Error(res.json().message);
+            window.location.reload();
+        }).catch((e)=>{
+            console.error(e);
+        })
+    }
       
 
     const onCancel = async ()=>{
@@ -47,6 +86,9 @@ export default function SubmitWork(){
             const tx = await taskContract.cancelTask();
             tx.wait(1);
             console.log(await taskContract.isCancelled());
+            const cancelled = await taskContract.isCancelled();
+            if(cancelled)
+                handleDelete();
         } catch(e){
             console.log(e)
         }

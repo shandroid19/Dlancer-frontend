@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import React, {useEffect, useState} from "react";
 import ProjectCard from "./ProjectCard";
-import { useERC20Balances } from "react-moralis";
+import { useMoralis } from "react-moralis";
 
 // const data = [
 //   {id:1,title:"todo",collaborators:2,tasks:5,status:1,skills:["golang","python"]},
@@ -30,8 +30,9 @@ export default function SearchProjects() {
  
   const [filterText, setFilterText] = useState("");
   const [data,setData] = useState([]);
+  const {account}= useMoralis();
   useEffect(()=>{
-    fetch('http://localhost:5000/api/projects/').then((res)=>{
+    fetch('http://localhost:5000/api/projects/searchprojects?walletID='+account).then((res)=>{
       if(res.status!=200)
         throw new Error(res.json().message);
       return res.json();

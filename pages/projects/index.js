@@ -28,7 +28,7 @@ export default function ProjectsPage(){
         console.error(e);
     })
   },[])
-
+  
   useEffect(()=>{
     fetch('http://localhost:5000/api/projects/other?walletID='+account).then((res)=>{
         return res.json();

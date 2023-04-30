@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
+    const tokenAddress = '0x7846b8505127eF5701b531e95420449A52FD1390'
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -60,6 +60,10 @@ export default function AddTask(){
         const onActivate = async ()=>{
             const reqObj = {name:taskname.current.value,description:description.current.value,deadline:timelimit.current.value,employer:account,employee:freelancer.current.value,amount:reward.current.value}
             console.log(reqObj)
+
+        
+            
+
             fetch('http://localhost:5000/api/tasks/',{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -70,17 +74,21 @@ export default function AddTask(){
                 console.log('contract address is '+res.address);
                 return res.address;
             }).then(async(contractAddress)=>{
-
+                console.log(contractAddress,tokenAddress,!abi,!BUSDabi)
             try {
                 //after deploying the contract on the backend, execute below functions using contractAddress obtained from serverside
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
                 const taskContract = new ethers.Contract(contractAddress, abi, signer);
                 const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
-                // const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000") );
-                // const tx = await taskContract.activateTask();
-                const result = await taskContract.isActivated();
-                console.log(result)
+
+                
+
+                const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000") );
+                const tx = await taskContract.activateTask();
+                // console.log(tx)
+                // const result = await taskContract.isActivated();
+                // console.log(result)
 
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
