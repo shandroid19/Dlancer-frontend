@@ -103,13 +103,13 @@ export default function Project(){
             <div className="row d-flex justify-content-center">
                 <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid}/>
             </div>
-            <div className="row d-flex justify-content-center">
+            {/* <div className="row d-flex justify-content-center">
                 <div className="col d-flex justify-content-center">
                 <button className="btn btn-primary" data-toggle="modal" data-target="#projectRequestModal">
                     Request to join
                 </button>
                 </div>
-            </div>
+            </div> */}
         </div>
         
     </div>

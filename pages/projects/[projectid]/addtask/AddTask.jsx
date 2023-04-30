@@ -26,6 +26,7 @@ export default function AddTask(){
         fetch('http://localhost:5000/api/tasks/collaborators?projectid='+router.query.projectid).then((res)=>{
             return res.json();
         }).then((res)=>{
+            console.log(res)
             setCollaborators(res);
         })
     },[])

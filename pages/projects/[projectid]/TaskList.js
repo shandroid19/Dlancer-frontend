@@ -20,7 +20,13 @@ export default function TaskList({tasks,projectid,usermode}){
                             Add task
                         </div>
                     </div>
-                </Link>:<></>
+                </Link>:
+                usermode==1?
+                <div className="card shadow">
+                        <div className="card-body text-center bg-primary text-white" data-toggle="modal" data-target="#projectRequestModal">
+                            Request to join
+                        </div>
+                    </div>:<></>
                 // usermode==1?<></>:
             //     <a>
             //     <div className="card  shadow" data-toggle="modal" data-target="#projectRequestModal">

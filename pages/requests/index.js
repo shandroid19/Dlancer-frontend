@@ -48,12 +48,11 @@ export default function Requests(){
         const project = _doc.project.projectName;
         const userid = _doc.user;
         const requestid = _doc._id
-        console.log(request)
         return <div className="row d-flex align-items-center ">
             <div className="col-sm-8">
             <Link href = {mode?`/projects/${project}`:`/users/${userid}`}>
                 <div className="card-body text-center">
-                    {!mode?<><Link href={`users/${walletID}`}>{username}</Link><> has invited you to contribute to the project "{project}"</></>:<><Link href={`users/${walletID}`}>{username}</Link> has sent a request to contribute to the project {project}</>}
+                    {!mode?<><Link href={`users/${walletID}`}>{username}</Link><> has invited you to contribute to the project "<Link href={`projects/${projectid}`}>{project}</Link>"</></>:<><Link href={`users/${walletID}`}>{username}</Link> has sent a request to contribute to the project {project}</>}
                 </div>
             </Link>
             </div>
@@ -81,7 +80,7 @@ export default function Requests(){
                 </div>
                 <div style={{height:'70vh',overflowY:'scroll',overflowX:'hidden'}} className="card-body">
                     <div className="container">
-                        {requestlist}
+                        {!requestlist.length?<p className="text-center">Nothing to see here</p>:requestlist}
                     </div>
                 </div>
             </div>
