@@ -27,7 +27,7 @@ export default function AddTask(){
             return res.json();
         }).then((res)=>{
             console.log(res)
-            setCollaborators(res);
+            setCollaborators(res.collaborators);
         })
     },[])
 
@@ -157,10 +157,13 @@ export default function AddTask(){
                     <label htmlFor="contributor"  className="col-sm-2 col-form-label">freelancer</label>
                         <div className="col-sm-4">
                         <select ref={freelancer} className="form-control my-1 mr-sm-2" >
-                            <option value="0xB45C57b446C82d93f5c4282eE8A47Ca149A4b042">Admin</option>
+                            {collaborators.map((collaborator)=>{
+                                return <option key={collaborator._id} value={collaborator.walletID}>{collaborator.username}</option>
+                            })}
+                            {/* <option value="0xB45C57b446C82d93f5c4282eE8A47Ca149A4b042">Admin</option>
                             <option value="0x66A296555bD0750635e8C3A8168Ed64d928E577a">employee</option>
                             <option value="0x89E2Da7cAC0360e7796722bA47b40c46A9CFEF39">testnet</option>
-                            <option value="0xb2bf46A95dCfd3B3Cc42A5BF7649378dd07c4fbD">owner</option>
+                            <option value="0xb2bf46A95dCfd3B3Cc42A5BF7649378dd07c4fbD">owner</option> */}
                         </select>
                         </div>
                     </div>
