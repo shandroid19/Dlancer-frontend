@@ -13,7 +13,8 @@ export default function SubmitWork(){
     const router= useRouter();
     const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
     const params = router.query;
-    const [task,setTask] = useState({})
+    const [task,setTask] = useState({});
+    const [conaddr,setConaddr] = useState('0x0');
     // const task = {
     //     name:"Todo List",
     //     description:"Develop a todo list which has the following features",
@@ -27,33 +28,55 @@ export default function SubmitWork(){
     // }
     const code = useRef(" ");
 
-    const {runContractFunction:getValues} = useWeb3Contract(
+    useEffect(() => {
+        if (router.query.taskid) {
+          fetch(`http://localhost:5000/api/projects/gettask/${router.query.taskid}`)
+            .then((res) => {
+              if (!res.ok) throw new Error(res.json().message);
+              return res.json();
+            })
+            .then((task) => {
+              setConaddr(task.contractAddress)
+            })
+            .catch((e) => {
+              console.error(e)
+            })
+        }
+      }, [router.query.taskid])
+    
+    var {runContractFunction:getValues} = useWeb3Contract(
         {
             abi:abi,
-            contractAddress:task.contractAddress,
+            contractAddress:conaddr,
             functionName:"getValues",
             chainId:chainId,
         }
     )
-
-
-    useEffect(async ()=>{
+    useEffect(()=>{
         try{
-            const arraydata = await getValues();
-            const resObj = {
-             title:arraydata[0],
-             description:arraydata[1],
-             employee:arraydata[2],
-             reward:ethers.utils.formatEther(arraydata[3]),
-             deadline:arraydata[4].toString(),
-             cancelled:arraydata[5],
-             completed:arraydata[6]    
-             }
-             setData(resObj);
-         }catch(e) {
-             console.error(e.message)
-         }
-    },[])
+            if(conaddr!='0x0')
+                getValues().then((arraydata)=>{
+                console.log(arraydata)
+                const resObj = {
+                taskName:arraydata[0],
+                description:arraydata[1],
+                employee:arraydata[2],
+                reward:ethers.utils.formatEther(arraydata[3]),
+                deadline:arraydata[4].toString(),
+                cancelled:arraydata[5],
+                completed:arraydata[6]    
+                };
+            console.log(resObj)
+            setTask(resObj);
+            });
+            
+            // console.log(resObj)
+        }catch(e) {
+            console.error(e.message);
+        }
+    },[conaddr]);
+
+    
 
     const submit = async ()=>{
         try{
@@ -96,16 +119,16 @@ export default function SubmitWork(){
 
 
 
-    const testcases= task.testcases.map((testcase,key)=>{
-        return <div key={key} className="row my-3">
-            <div className="col-sm-6">
-                {testcase.input}
-            </div>
-            <div className="col-sm-6">
-                {testcase.output}
-            </div>
-        </div>
-    })
+    // const testcases= task.testcases.map((testcase,key)=>{
+    //     return <div key={key} className="row my-3">
+    //         <div className="col-sm-6">
+    //             {testcase.input}
+    //         </div>
+    //         <div className="col-sm-6">
+    //             {testcase.output}
+    //         </div>
+    //     </div>
+    // })
 
     return<>
     <Header/>
@@ -117,7 +140,7 @@ export default function SubmitWork(){
                         <b>Task Name:</b>
                     </div>
                     <div className="col-sm-9 ">
-                        {task.name}
+                        {task.taskName}
                     </div>
                 </div>
                 <div className="row my-3">
@@ -141,10 +164,10 @@ export default function SubmitWork(){
                        <b> Reward:</b>
                     </div>
                     <div className="col-sm-9">
-                        {task.reward} ETH
+                        {task.reward} USD
                     </div>
                 </div>
-                <div className="row my-3">
+                {/* <div className="row my-3">
                     <div className="col-sm-3 ">
                        <b> Test Cases:</b>
                     </div>
@@ -159,7 +182,7 @@ export default function SubmitWork(){
                     </div>
                         {testcases}
                     </div>
-                </div>
+                </div> */}
                 <div className="row my-3">
                     <div className="col-sm-3 ">
                        <b> Your code:</b>

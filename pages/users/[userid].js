@@ -302,7 +302,7 @@ const displayprofile =  <div className="container">
                             <b>Task completed:</b>
                         </div>
                         <div className='col-6'>
-                            {data.tasksAssigned?.length}
+                            {data.tasksCompleted?.length}
                         </div>
                     </div>
                     <div className='row my-2'>

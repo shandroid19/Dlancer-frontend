@@ -61,7 +61,6 @@ export default function TaskCard({task,projectid,usermode}){
             console.error(e.message)
         }
     }
-
   
        return <div  className="card shadow text-dark my-3">
         <div className="card-body">
@@ -87,7 +86,7 @@ export default function TaskCard({task,projectid,usermode}){
                          </div>
                         :
                         <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
-                        <div className="btn btn-primary" onClick={()=>{router.push(`/projects/${projectid}/${task.id}`)}}>Open</div>
+                        <div className="btn btn-primary" onClick={()=>{router.push(`/projects/${projectid}/${task._id}`)}}>Open</div>
                             </div>
                     }
 
