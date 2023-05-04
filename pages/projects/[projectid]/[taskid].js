@@ -222,30 +222,8 @@ export default function SubmitWork(){
                         {task.reward} USD
                     </div>
                 </div>
-                {/* <div className="row my-3">
-                    <div className="col-sm-3 ">
-                       <b> Test Cases:</b>
-                    </div>
-                    <div className="col-sm-9">
-                    <div className="row">
-                        <div className="col-sm-6">
-                            <b>Inputs</b>
-                        </div>
-                        <div className="col-sm-6">
-                            <b>Outputs</b>
-                        </div>
-                    </div>
-                        {testcases}
-                    </div>
-                </div> */}
-                <div className="row my-3">
-                    <div className="col-sm-3 ">
-                       <b> Your code:</b>
-                    </div>
-                    <div className="col-sm-9">
-                        <textarea className="form-control" ref={code} rows={6}/>
-                    </div>
-                </div>
+                
+               
                 {active?
                 <div className="row">
                 <div className="col-lg-1 col-md-2 col-sm-3">

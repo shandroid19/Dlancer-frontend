@@ -66,7 +66,7 @@ export default function Users(){
         });
       
         const listed = filteredData.map((item,key)=>{
-          return <div key={key} className="col-md-6 col-lg-4">
+          return <div key={key} className="col-md-6 col-lg-4 my-3">
           <User id={item.walletID} username={item.username} skills={item.skills} tasks={item.tasksCompleted?.length} image={item.image}></User>
           </div>
         });

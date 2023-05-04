@@ -394,7 +394,7 @@ const displayprofile = <div className='container mt-5'>
   <div className="card h-100">
     <div className="card-body">
       <div className="d-flex flex-column align-items-center text-center">
-        <img src={image} alt="Admin" className="rounded-circle" width="150"/>
+        <img src={image} alt="Admin" className="rounded-circle" style={{width:"10rem",height:"10rem",objectFit:'contain'}}/>
         <div className="mt-3">
           <h4>{data.username}</h4>
           <p className="text-secondary mb-1">{data.bio}</p>
