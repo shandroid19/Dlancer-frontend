@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = '0x7846b8505127eF5701b531e95420449A52FD1390'
+    const tokenAddress = '0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0'
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -42,28 +42,12 @@ export default function AddTask(){
         setSkills(skills.filter((s) => s !== skill))
       }
 
-    
-      
-    const {runContractFunction:activateTask} = useWeb3Contract(
-        {
-            abi:abi,
-            contractAddress:contractAddress,
-            functionName:"activateTask",
-            
-            params:{_reward: ethers.utils.parseEther(reward.current?.value || "0")},
-            chainId:chainId,
-            
-            msgValue:ethers.utils.parseEther(reward.current?.value || "0")
-        }
-    )
 
         const onActivate = async ()=>{
             const reqObj = {name:taskname.current.value,description:description.current.value,deadline:timelimit.current.value,employer:account,employee:freelancer.current.value,amount:reward.current.value}
             console.log(reqObj)
 
         
-            
-
             fetch('http://localhost:5000/api/tasks/',{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -83,8 +67,9 @@ export default function AddTask(){
                 const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
 
                 
-
-                const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000") );
+                // await tokenContract.mint(account, ethers.utils.parseUnits(reward.current.value.toString()));
+                console.log(typeof reqObj.amount)
+                const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000"));
                 const tx = await taskContract.activateTask();
                 // console.log(tx)
                 // const result = await taskContract.isActivated();
@@ -156,10 +141,10 @@ export default function AddTask(){
                     </div>
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
-                        <div className="col-sm-4"><input ref={timelimit} min={1} type="number" placeholder="in hrs" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={timelimit} min={0} type="number" placeholder="in hrs" className="form-control"/></div>
                         
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Reward</label>
-                        <div className="col-sm-4"><input ref={reward} type="text" placeholder="in ETH" className="form-control"/></div>
+                        <div className="col-sm-4"><input ref={reward} type="text" placeholder="in USD" className="form-control"/></div>
                     </div>
                     <div className="form-group row my-3">
                     <label htmlFor="contributor"  className="col-sm-2 col-form-label">freelancer</label>

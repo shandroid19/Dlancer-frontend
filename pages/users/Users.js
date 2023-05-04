@@ -70,7 +70,7 @@ export default function Users(){
           <User id={item.walletID} username={item.username} skills={item.skills} tasks={item.tasksCompleted?.length} image={item.image}></User>
           </div>
         });
-        return  <div className="row d-flex justify-content-center">{listed}</div>;
+        return  <div className="row d-flex justify-content-center">{listed}</div>
       }
 
     const handleFilterChange = (event) => {
@@ -88,7 +88,7 @@ export default function Users(){
     <div className="container p-5">
         <div className="row d-flex justify-content-center">
           <div className="col-sm-4">
-            <input type="text" placeholder="Search..." className="form-control" value={filterText} onChange={handleFilterChange} />
+            <input type="text" placeholder="Search users..." className="form-control" value={filterText} onChange={handleFilterChange} />
           </div>
           <div className="col-sm-4">
           <select
@@ -104,6 +104,8 @@ export default function Users(){
             })}
 
           </select>    
+          </div>
+          <div className="col-sm-4">
 
           <select
             id="taskselect"

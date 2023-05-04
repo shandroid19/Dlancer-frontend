@@ -15,12 +15,14 @@ export default function Profile(){
     const [newtitle,setTitle] = useState('');
     const [neworg,setOrg] = useState('');
     const [newlink,setLink] = useState('');
+    const [loading,setLoading] = useState(false);
     const email = useRef("")
     const username = useRef("");
     const bio = useRef("");
     const location = useRef("");
     const router= useRouter();
     const imgurl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpCKq1XnPYYDaUIlwlsvmLPZ-9-rdK28RToA&usqp=CAU";
+    const [image,setImage] = useState(imgurl);
     const [data,setData] = useState(
       {username:"employee",walletID:"0x1CBd3b2770909D4e10f157cABC84C7264073C9Ec",
       skills:["React.js","Python","Tensorflow"],
@@ -35,6 +37,7 @@ useEffect(()=>{
         return res.json();
     }).then((res)=>{
         setData(res)
+        setImage(res.image)
         setSkills(res.skills)
     }).catch((e)=>{
         console.error(e);
@@ -89,19 +92,19 @@ const {account} = useMoralis();
 
 const accountprojects = [{id:1,title:"Todo app"},{id:2,title:"Self balancing robot"},{id:3,title:"gyroscope"}];
 
-const projectlist = projects.map((project,key)=>{
+const projectlist = projects.length?projects?.map((project,key)=>{
     return <div className='row my-3' key={key}>
       <div className='col-12'><ProjectCard  project ={project}/></div>
       {/* <ProjectCard key={key} tasks={project.tasks} title = {project.title} status = {project.status} /> */}
       {/* <Project key={key} tasks={project.tasks} title={project.title} status={project.status}/> */}
       </div>
-})
+}):<p className='text-center'>No projects yet</p>
 
-const certificatelist = certlist.map((cert,key)=>{
+const certificatelist = certlist.length?certlist.map((cert,key)=>{
     return <div className='row my-3' key={key}>
       <Certificate  currentuser={data.walletID} id={cert._id} title={cert.title} org = {cert.org} link={cert.link} verified={cert.verified}/>
       </div>
-})
+}):<p className='text-center'>No Certificates uplodaded</p>
 
 const invite = ()=>{
     fetch('http://localhost:5000/api/req',{
@@ -157,6 +160,7 @@ const handleAddCertificate = ()=>{
     email:email.current.value,
     location:location.current.value,
     bio:bio.current.value,
+    image:image,
     skills
   })
 }).then((res)=>{
@@ -165,72 +169,117 @@ const handleAddCertificate = ()=>{
     setEdit(false);
 }
 
+const handleImageClick = () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = uploadImage;
+  input.click();
+};
 
-  const editprofile = <form className="container" >
-  <div className='card-body'>
-    <div className='container'>
-      <div className='row d-flex justify-content-center py-5'>
-        <div className='col-xl-1 col-lg-2 col-md-2 col-sm-3 p-5 p-sm-0 d-flex align-items-center'>
-          <img className={styles.cardimg} src={imgurl}></img>
+const uploadImage = async e=> {
+  const files = e.target.files
+  const data = new FormData()
+  data.append('file',files[0])
+  data.append('upload_preset','breedy')
+  let filname=files[0].name.toLowerCase();
+  if(!(filname.endsWith('.jpg')||filname.endsWith('.png')||filname.endsWith('.jpeg')))
+    {
+      alert("Only '.png' , '.jpg' and '.jpeg' formats supported!");
+      return;
+    }
+  setLoading(true)
+  const res = await fetch("https://api.cloudinary.com/v1_1/shandroid/image/upload",
+  {
+      method: 'POST',
+      body:data
+  })
+  const file = await res.json()
+  setImage(file.secure_url)
+  setLoading(false)
+
+}
+
+
+const editprofile = <div className='container mt-5'>
+<div className="row gutters-sm">
+<div className="col-md-4 mb-3">
+  <div className="card h-100">
+    <div className="card-body">
+      <div className="d-flex flex-column align-items-center text-center">
+        <img src={image} alt="Admin" className="rounded-circle" width="150" onClick={handleImageClick}/>
+        <div className="mt-3">
+          <p className="text-secondary mb-1">{data.bio}</p>
+               <button onClick={handleSave} className="btn shadow bg-primary text-white">
+                 Save changes
+               </button>
         </div>
-        <div className='col-lg-4'>
-          <div className='container'>
-            <div className='row my-2'>
-              <div className='col-6'>
-                <b>Username:</b>
-              </div>
-              <div className='col-6 '>
-                <input type="text" className='form-control' ref={username} name="username" defaultValue={data.username} />
-              </div>
-            </div>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+<div className="col-md-8">
+  <div className="card mb-3">
+    <div className="card-body">
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Username</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+           <input type="text" className='form-control' ref={username} name="username" defaultValue={data.username} />
 
-            <div className='row my-2'>
-              <div className='col-6'>
-                <b>Bio:</b>
-              </div>
-              <div className='col-6 '>
-                <input type="text" className='form-control' ref={bio} name="bio" defaultValue={data.bio} />
-              </div>
-            </div>
-           
-            <div className='row my-2'>
-              <div className='col-6'>
-                <b>Email:</b>
-              </div>
-              <div className='col-6'>
-                <input type="email" className='form-control' ref={email} name="email" defaultValue={data.email} />
-              </div>
-            </div>
-            
-            <div className='row my-2'>
-              <div className='col-6'>
-                <b>Location:</b>
-              </div>
-              <div className='col-6'>
-                <input type="text" className='form-control' ref={location} name="location" defaultValue={data.location} />
-              </div>
-            </div>
-            <div className='row my-2'>
-            <div className='col-6'>
-                <b>Skills:</b>
-            </div>
-            <div className='col-6'>
-      
-             <div className="input-group mb-3">
-            <select
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Email</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+            <input type="email" className='form-control' ref={email} name="email" defaultValue={data.email} />
+
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Bio</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+           <input type="text" className='form-control' ref={bio} name="bio" defaultValue={data.bio} />
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Location</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data?.location}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Skills</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+        <div className="input-group mb-3">
+             <select
             className="form-control"
             id="skillSelect"
             onChange={handleSkillAdd}
             >
           <option defaultValue="">-- Select a skill --</option>
-            {skillsets.map((item,key)=>{
+            {skillsets?.map((item,key)=>{
                 return <option key={key} value={key}>{item}</option>
             })}
           </select>
           </div>
                 
                 <div className="skills-list">
-    {skills.map((skill, index) => (
+    {skills?.map((skill, index) => (
       <span
         key={index}
         className="badge badge-secondary mr-2"
@@ -240,91 +289,116 @@ const handleAddCertificate = ()=>{
       </span>
     ))}
   </div>
-    
-             </div>
-            </div>
-            <div className="btn shadow bg-primary" onClick={handleSave}>
-              <div onClick={handleSave} className="card-body text-center text-white">
-                Save
-              </div>
-            </div>
-        
-          </div>
         </div>
       </div>
+    
+           
     </div>
   </div>
-</form>
+  </div>
+  </div>
+  </div>
+//   const editprofile = <form className="container" >
+//   <div className='card-body'>
+//     <div className='container'>
+//       <div className='row d-flex justify-content-center py-5'>
+//         <div className='col-xl-1 col-lg-2 col-md-2 col-sm-3 p-5 p-sm-0 d-flex align-items-center'>
+//           <img className={styles.cardimg} src={imgurl}></img>
+//         </div>
+//         <div className='col-lg-4'>
+//           <div className='container'>
+//             <div className='row my-2'>
+//               <div className='col-6'>
+//                 <b>Username:</b>
+//               </div>
+//               <div className='col-6 '>
+//                 <input type="text" className='form-control' ref={username} name="username" defaultValue={data.username} />
+//               </div>
+//             </div>
 
-const displayprofile =  <div className="container">
-<div className='card-body'>
-    <div className='container'>
-        <div className='row d-flex justify-content-center py-5'>
-            <div className='col-xl-1 col-lg-2 col-md-2 col-sm-3 p-5 p-sm-0 d-flex align-items-center'>
-                <img className={styles.cardimg} src={imgurl}></img>
-            </div>
-            <div className='col-lg-4'>
-                <div className='container'>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Username:</b>
-                        </div>
-                        <div className='col-6 '>
-                            {data.username}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Bio:</b>
-                        </div>
-                        <div className='col-6 '>
-                            {data.bio}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Wallet:</b>
-                        </div>
-                        <div className='col-6'>
-                            {data.walletID.slice(0,6)}...{data.walletID.slice(data.walletID.length-4)}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Email:</b>
-                        </div>
-                        <div className='col-6'>
-                            {data.email}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Task completed:</b>
-                        </div>
-                        <div className='col-6'>
-                            {data.tasksCompleted?.length}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Location:</b>
-                        </div>
-                        <div className='col-6'>
-                            {data.location}
-                        </div>
-                    </div>
-                    <div className='row my-2'>
-                        <div className='col-6'>
-                            <b>Skills:</b>
-                        </div>
-                        <div className='col-6'>
-                        {data.skills.map((skill,key)=>{
-                            return <span key={key} className="badge bg-secondary">{skillsets[skill]}</span>
-                        })}
-                        </div>
-                    </div>
-{console.log(account?.toLowerCase()==data.walletID.toLowerCase())}
-                        {account?.toLowerCase()==data.walletID.toLowerCase()?
+//             <div className='row my-2'>
+//               <div className='col-6'>
+//                 <b>Bio:</b>
+//               </div>
+//               <div className='col-6 '>
+//                 <input type="text" className='form-control' ref={bio} name="bio" defaultValue={data.bio} />
+//               </div>
+//             </div>
+           
+//             <div className='row my-2'>
+//               <div className='col-6'>
+//                 <b>Email:</b>
+//               </div>
+//               <div className='col-6'>
+//                 <input type="email" className='form-control' ref={email} name="email" defaultValue={data.email} />
+//               </div>
+//             </div>
+            
+//             <div className='row my-2'>
+//               <div className='col-6'>
+//                 <b>Location:</b>
+//               </div>
+//               <div className='col-6'>
+//                 <input type="text" className='form-control' ref={location} name="location" defaultValue={data.location} />
+//               </div>
+//             </div>
+//             <div className='row my-2'>
+//             <div className='col-6'>
+//                 <b>Skills:</b>
+//             </div>
+//             <div className='col-6'>
+      
+//              <div className="input-group mb-3">
+//             <select
+//             className="form-control"
+//             id="skillSelect"
+//             onChange={handleSkillAdd}
+//             >
+//           <option defaultValue="">-- Select a skill --</option>
+//             {skillsets.map((item,key)=>{
+//                 return <option key={key} value={key}>{item}</option>
+//             })}
+//           </select>
+//           </div>
+                
+//                 <div className="skills-list">
+//     {skills.map((skill, index) => (
+//       <span
+//         key={index}
+//         className="badge badge-secondary mr-2"
+//         onClick={() => handleSkillRemove(skill)}
+//       >
+//         {skillsets[skill]} &times;
+//       </span>
+//     ))}
+//   </div>
+    
+//              </div>
+//             </div>
+//             <div className="btn shadow bg-primary" onClick={handleSave}>
+//               <div onClick={handleSave} className="card-body text-center text-white">
+//                 Save
+//               </div>
+//             </div>
+        
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// </form>
+
+const displayprofile = <div className='container mt-5'>
+<div className="row gutters-sm">
+<div className="col-md-4 mb-3">
+  <div className="card h-100">
+    <div className="card-body">
+      <div className="d-flex flex-column align-items-center text-center">
+        <img src={image} alt="Admin" className="rounded-circle" width="150"/>
+        <div className="mt-3">
+          <h4>{data.username}</h4>
+          <p className="text-secondary mb-1">{data.bio}</p>
+          {account?.toLowerCase()==data.walletID.toLowerCase()?
                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
                         Edit profile
                     </div>:
@@ -334,13 +408,163 @@ const displayprofile =  <div className="container">
                         </div>:<></>
                         
                         }
-
-                </div>
-            </div>
         </div>
+      </div>
     </div>
+  </div>
+ 
 </div>
-</div> 
+<div className="col-md-8">
+  <div className="card mb-3">
+    <div className="card-body">
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Username</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data.username}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Email</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data.email}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Tasks Completed</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data?.tasksCompleted?.length}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Tasks Assigned</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data?.tasksAssigned?.length}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Location</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+          {data.location}
+        </div>
+      </div>
+      <hr/>
+      <div className="row">
+        <div className="col-sm-3">
+          <h6 className="mb-0">Skills</h6>
+        </div>
+        <div className="col-sm-9 text-secondary">
+        {data.skills.map((skill,key)=>{
+          return <span key={key} className="badge bg-secondary m-1">{skillsets[skill]}</span>
+           })}  
+        </div>
+      </div>
+    
+           
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+// const displayprofile =  <div className="container">
+// <div className='card-body'>
+//     <div className='container'>
+//         <div className='row d-flex justify-content-center py-5'>
+//             <div className='col-xl-1 col-lg-2 col-md-2 col-sm-3 p-5 p-sm-0 d-flex align-items-center'>
+//                 <img className={styles.cardimg} src={imgurl}></img>
+//             </div>
+//             <div className='col-lg-4'>
+//                 <div className='container'>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Username:</b>
+//                         </div>
+//                         <div className='col-6 '>
+//                             {data.username}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Bio:</b>
+//                         </div>
+//                         <div className='col-6 '>
+//                             {data.bio}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Wallet:</b>
+//                         </div>
+//                         <div className='col-6'>
+//                             {data.walletID.slice(0,6)}...{data.walletID.slice(data.walletID.length-4)}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Email:</b>
+//                         </div>
+//                         <div className='col-6'>
+//                             {data.email}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Task completed:</b>
+//                         </div>
+//                         <div className='col-6'>
+//                             {data.tasksCompleted?.length}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Location:</b>
+//                         </div>
+//                         <div className='col-6'>
+//                             {data.location}
+//                         </div>
+//                     </div>
+//                     <div className='row my-2'>
+//                         <div className='col-6'>
+//                             <b>Skills:</b>
+//                         </div>
+//                         <div className='col-6'>
+//                         {data.skills.map((skill,key)=>{
+//                             return <span key={key} className="badge bg-secondary">{skillsets[skill]}</span>
+//                         })}
+//                         </div>
+//                     </div>
+// {console.log(account?.toLowerCase()==data.walletID.toLowerCase())}
+//                         {account?.toLowerCase()==data.walletID.toLowerCase()?
+//                         <div onClick={()=>setEdit(1)} className="btn shadow bg-primary text-center text-white ">
+//                         Edit profile
+//                     </div>:
+//                         ownProjects.length?
+//                         <div className="btn shadow bg-primary text-center text-white" data-toggle="modal" data-target="#projectInviteModal">
+//                             Invite for collaboration
+//                         </div>:<></>
+                        
+//                         }
+
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+    
+// </div>
+// </div> 
   
 
     return<>
@@ -429,7 +653,7 @@ const displayprofile =  <div className="container">
                     <h3 className='justify-content-center d-flex'>Projects</h3>
                 </div>
                 <div className='row'>
-                    <div style={{height:'70vh',overflowY:'scroll'}} className='container bg-secondary p-sm-5'>
+                    <div style={{height:'70vh',overflowY:'scroll'}} className='container bg2 p-sm-5'>
                         {projectlist}
                     </div>
                 </div>
@@ -441,7 +665,7 @@ const displayprofile =  <div className="container">
                     <h3 className='justify-content-center d-flex'>Certificates</h3>
                 </div>
                 <div className='row'>
-                    <div style={{height:'70vh',overflowY:'scroll'}} className='container bg-secondary p-sm-5'>
+                    <div style={{height:'70vh',overflowY:'scroll'}} className='container bg2 p-sm-5'>
                         {certificatelist}
                         {router.query.userid?.toLowerCase()==account?<div className='row my-2 justify-content-center d-flex'>
                           <div className='col-sm-6 justify-content-center d-flex'>

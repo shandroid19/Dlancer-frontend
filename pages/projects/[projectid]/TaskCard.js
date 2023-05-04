@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { abi,addresses} from "@/constants";
 import { ethers } from "ethers";
 
+
 export default function TaskCard({task,projectid,usermode}){
     const router = useRouter();
     const [data, setData] = useState(null);
@@ -18,6 +19,15 @@ export default function TaskCard({task,projectid,usermode}){
             chainId:chainId,
         }
     )
+
+    const {runContractFunction:getRefund} = useWeb3Contract(
+        {
+            abi:abi,
+            contractAddress:task.contractAddress,
+            functionName:"getRefund",
+            chainId:chainId,
+        }
+    )
     const handleDelete = ()=>{
         fetch('http://localhost:5000/api/tasks/'+projectid+'?taskid='+task._id,{method:'DELETE'}).then((res)=>{
             if(res.status!=200) throw new Error(res.json().message);
@@ -27,6 +37,15 @@ export default function TaskCard({task,projectid,usermode}){
         })
     }
     
+    const handleRefund= ()=>{
+        getRefund().then((res)=>{
+            console.log(res)
+            console.log("Refund successful");
+        }).catch((e)=>{
+            console.error(e);
+        })
+    }
+
     const handleView = async()=>{
         // fetch('http://localhost:5000/api/tasks/',).then((res)=>{
         //     if(res.status!=200) throw new Error(res.json().message);
@@ -61,7 +80,13 @@ export default function TaskCard({task,projectid,usermode}){
             console.error(e.message)
         }
     }
-  
+    function formatTime(seconds) {
+        const days = Math.floor(seconds / (24 * 60 * 60));
+        const hours = Math.floor(seconds / (60 * 60)) % 24;
+        const minutes = Math.floor(seconds / 60) % 60;
+        const remainingSeconds = seconds % 60;
+        return `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+      }
        return <div  className="card shadow text-dark my-3">
         <div className="card-body">
             <div className="container ">
@@ -82,7 +107,7 @@ export default function TaskCard({task,projectid,usermode}){
                         {usermode!=0?
                             <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
                         <div className="btn btn-danger" onClick={handleDelete}>Remove</div>
-                         <div className="btn btn-primary" data-toggle="modal" data-target="#viewModal" onClick={handleView}>View</div>
+                         <div className="btn btn-primary" data-toggle="modal" data-target={`#viewModal${task._id}`} onClick={handleView}>View</div>
                          </div>
                         :
                         <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
@@ -91,7 +116,7 @@ export default function TaskCard({task,projectid,usermode}){
                     }
 
 
-<div className="modal fade" id="viewModal" tabIndex="-1" role="dialog" aria-hidden="true">
+<div className="modal fade" id={`viewModal${task._id}`} tabIndex="-1" role="dialog" aria-hidden="true">
   <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
@@ -131,9 +156,18 @@ export default function TaskCard({task,projectid,usermode}){
                     deadline:
                 </div>
                 <div className="col-sm-8">
-                    {data?.deadline}
+                    {(data?.deadline-Math.floor(Date.now() / 1000))>0?formatTime(data?.deadline-Math.floor(Date.now() / 1000)):"Exceeded"}
                 </div>
             </div>
+            {(data?.deadline-Math.floor(Date.now() / 1000))<0 && !data?.cancelled?
+            <div className="row d-flex flex-row-reverse d-flex mt-2">
+                <div className="col">
+                    <button className="btn btn-primary btn-sm" data-dismiss="modal" onClick={handleRefund}>
+                        Get Refund
+                    </button>
+                    </div>
+            </div>
+            :<></>}
         </div>
       </div>
       <div className="modal-footer">
