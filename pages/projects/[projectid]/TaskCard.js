@@ -104,15 +104,15 @@ export default function TaskCard({task,projectid,usermode}){
                         {task.freelancer.slice(0,6)}...{task.freelancer.slice(task.freelancer.length-4)}
                     </div>
              
-                        {usermode!=0?
+                        {usermode==2?
                             <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
-                        <div className="btn btn-danger" onClick={handleDelete}>Remove</div>
+                        {/* <div className="btn btn-danger" onClick={handleDelete}>Remove</div> */}
                          <div className="btn btn-primary" data-toggle="modal" data-target={`#viewModal${task._id}`} onClick={handleView}>View</div>
                          </div>
-                        :
+                        :usermode==1?
                         <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
                         <div className="btn btn-primary" onClick={()=>{router.push(`/projects/${projectid}/${task._id}`)}}>Open</div>
-                            </div>
+                            </div>:<></>
                     }
 
 
@@ -159,6 +159,7 @@ export default function TaskCard({task,projectid,usermode}){
                     {(data?.deadline-Math.floor(Date.now() / 1000))>0?formatTime(data?.deadline-Math.floor(Date.now() / 1000)):"Exceeded"}
                 </div>
             </div>
+            {data?.completed?<span className="badge bg-success">Completed</span>:<></>}
             {(data?.deadline-Math.floor(Date.now() / 1000))<0 && !data?.cancelled?
             <div className="row d-flex flex-row-reverse d-flex mt-2">
                 <div className="col">
