@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = '0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0'
+    const tokenAddress = '0x924E039a029c9072E99387Ac30df3149b228c3F5'
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -63,9 +63,11 @@ export default function AddTask(){
                 //after deploying the contract on the backend, execute below functions using contractAddress obtained from serverside
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
+                console.log(contractAddress)
                 const taskContract = new ethers.Contract(contractAddress, abi, signer);
                 const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
 
+                console.log("signer: \n",signer)
                 
                 // await tokenContract.mint(account, ethers.utils.parseUnits(reward.current.value.toString()));
                 console.log(typeof reqObj.amount)

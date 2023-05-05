@@ -11,7 +11,7 @@ export default function SubmitWork(){
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const {account} = useMoralis();
     const router= useRouter();
-    const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
+    const tokenAddress = '0x924E039a029c9072E99387Ac30df3149b228c3F5'
     const params = router.query;
     const [task,setTask] = useState({});
     const [conaddr,setConaddr] = useState('0x0');
