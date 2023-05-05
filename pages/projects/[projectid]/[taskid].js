@@ -128,9 +128,9 @@ export default function SubmitWork(){
     }
 
     const handleDelete = ()=>{
-        fetch('http://localhost:5000/api/tasks/'+projectid+'?taskid='+task._id,{method:'DELETE'}).then((res)=>{
+        fetch('http://localhost:5000/api/tasks/'+router.query.projectid+'?taskid='+router.query.taskid,{method:'DELETE'}).then((res)=>{
             if(res.status!=200) throw new Error(res.json().message);
-            window.location.reload();
+            router.push('/projects/'+router.query.projectid);
         }).catch((e)=>{
             console.error(e);
         })
@@ -148,10 +148,10 @@ export default function SubmitWork(){
 
             // await tokenContract.mint(account, ethers.utils.parseUnits("5000"));
             // const approveTx = await tokenContract.connect(signer).approve(conaddr,ethers.utils.parseUnits("5000") );
-            console.log(await isCancelled());
             const txc = await cancelTask();
-            console.log(await isCancelled());
-            console.log(txc)
+            if(txc===undefined) throw new Error("task could not be cancelled");
+            handleDelete();
+            
             // const balance = await tokenContract.balanceOf(conaddr);
             // console.log(balance.toString());
             // const tx = await taskContract.cancelTask();
@@ -230,7 +230,7 @@ export default function SubmitWork(){
                     <button className="btn btn-primary" onClick={submit}>Submit task</button>
                 </div>
                 <div className="col-lg-1 col-md-2 col-sm-3">
-                    <button className="btn btn-danger" onClick={onCancel}>Cancel task</button>
+                    <button className="btn btn-danger" data-toggle="modal" data-target="#cancelModal">Cancel task</button>
                 </div>
                 </div>
                 :<></>
@@ -239,5 +239,30 @@ export default function SubmitWork(){
             
         </div>
     </div>
+    {/* MODAL STARTS HERE */}
+    <div className="modal fade" id="cancelModal" tabIndex="-1" role="dialog" aria-labelledby="cancelModal" aria-hidden="true">
+    <div className="modal-dialog" role="document">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title" > Cancel task</h5>
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div className="modal-body">
+        <div className="container">
+            <div className='row d-flex justify-content-center'>
+                <p className="card-text">Are you sure you want to Cancel this Task? This action cannot be reverted.</p>
+            </div>
+        </div>
+      </div>
+      <div className="modal-footer">
+        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={onCancel}>Proceed</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    {/* MODAL ENDS HERE */}
     </>
 }

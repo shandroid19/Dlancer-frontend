@@ -39,8 +39,8 @@ export default function TaskCard({task,projectid,usermode}){
     
     const handleRefund= ()=>{
         getRefund().then((res)=>{
-            console.log(res)
-            console.log("Refund successful");
+            if(!res) throw new Error("Refund not successful");
+            handleDelete();
         }).catch((e)=>{
             console.error(e);
         })
@@ -163,7 +163,7 @@ export default function TaskCard({task,projectid,usermode}){
             <div className="row d-flex flex-row-reverse d-flex mt-2">
                 <div className="col">
                     <button className="btn btn-primary btn-sm" data-dismiss="modal" onClick={handleRefund}>
-                        Get Refund
+                        Reclaim
                     </button>
                     </div>
             </div>
