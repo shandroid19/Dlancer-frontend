@@ -11,6 +11,8 @@ export default function CreateProject(){
     const [skills, setSkills] = useState([]);
     const name= useRef('')
     const description = useRef('') 
+    const branch = useRef('')
+    const repo = useRef('')
     const handleSkillAdd = (e) => {
         const selectedSkill = e.target.value;
         if (!skills.includes(selectedSkill)) {
@@ -27,6 +29,8 @@ export default function CreateProject(){
             body:JSON.stringify({
                 projName:name.current.value,
                 description:description.current.value,
+                repo:repo.current.value,
+                branch:branch.current.value,
                 skills:skills
             })
         }).then((res)=>{
@@ -85,6 +89,26 @@ export default function CreateProject(){
                                 <textarea ref={description} placeholder="enter the description" className="form-control" rows={4} ></textarea>
                             </div>
                         </div>
+
+                        <div className="row d-flex justify-content-center my-4">
+                            <div className='col-md-3'>
+                                <b>Repo link:</b>
+                            </div>
+                            <div className='col-md-6'>
+                                <input type="text" ref={repo} placeholder="enter the github repository link" className="form-control" />
+                            </div>
+                        </div>
+
+                        <div className="row d-flex justify-content-center my-4">
+                            <div className='col-md-3'>
+                                <b>Default branch:</b>
+                            </div>
+                            <div className='col-md-6'>
+                                <input type='text' ref={branch} placeholder="enter the branch" className="form-control" rows={4} />
+                            </div>
+                        </div>
+
+
                 <div className="row d-flex justify-content-center my-4">
 
                 <div className='col-md-3'>
@@ -116,13 +140,11 @@ export default function CreateProject(){
                 </div>
                 </div>
                 </div>
-                        <div className="row d-flex  justify-content-center">
-                            <div className="col-md-3">
-                            <div className="btn shadow bg-primary"  data-toggle="modal" data-target="#projectCreateModal">
-                                        <div className="card-body text-center text-white">
+                        <div className="row d-flex justify-content-center">
+                            <div className="col text-center">
+                            <button className="btn shadow bg-primary text-white"  data-toggle="modal" data-target="#projectCreateModal">
                                         Create project
-                                        </div>
-                                    </div>
+                                    </button>
                             </div>
                         </div>
                     </div>
