@@ -258,6 +258,7 @@ export default function AddTask(){
                             </div>
                         </div>
                     </div>
+
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
                         <div className="col-sm-4"><input ref={timelimit} min={0} type="number" placeholder="in hrs" className="form-control"/></div>
