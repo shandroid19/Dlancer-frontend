@@ -67,7 +67,7 @@ export default function CreateProject(){
 
         <div className="container p-5">
             <div className="card shadow">
-            <div className="card-header text-center display-6">
+            <div className="card-header bg1 text-center display-6">
                         Create a project
                     </div>
                 <div className="card-body">
