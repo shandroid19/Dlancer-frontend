@@ -75,7 +75,7 @@ export default function Requests(){
             <div className="row d-flex justify-content-center">
             <div className="col-sm-6">
             <div  className="card">
-                <div className="card-header">
+                <div className="card-header bg1">
                     Requests
                 </div>
                 <div style={{height:'70vh',overflowY:'scroll',overflowX:'hidden'}} className="card-body">

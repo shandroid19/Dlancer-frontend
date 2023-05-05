@@ -194,13 +194,13 @@ export default function AddTask(){
                     <div className="form-group row my-3">
                         <label htmlFor="title" className="col-sm-2 col-form-label">Task name</label>
                         <div className="col-sm-10">
-                            <input ref={taskname} type="text" className="form-control" placeholder="enter task title" />
+                            <input ref={taskname} type="text" className="form-control" placeholder="Enter task title" />
                         </div>
                     </div>
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Description</label>
                         <div className="col-sm-10">
-                            <textarea type="text" ref={description} rows={4} className="form-control" placeholder="enter task description" />
+                            <textarea type="text" ref={description} rows={4} className="form-control" placeholder="Enter the task description" />
                         </div>
                     </div>
 
