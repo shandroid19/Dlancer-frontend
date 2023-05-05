@@ -29,8 +29,8 @@ export default function CreateProject(){
             body:JSON.stringify({
                 projName:name.current.value,
                 description:description.current.value,
-                repo:repo.current.value,
-                branch:branch.current.value,
+                // repo:repo.current.value,
+                // branch:branch.current.value,
                 skills:skills
             })
         }).then((res)=>{

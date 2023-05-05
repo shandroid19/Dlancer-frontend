@@ -60,7 +60,7 @@ export default function ProjectCard({project}){
                 )}
                 </div>
                             </div>
-                            <div className='row my-1'>
+                            {/* <div className='row my-1'>
                                 <div className="col-sm-6">
                                     <b>Status:</b>
                                 </div>
@@ -68,7 +68,7 @@ export default function ProjectCard({project}){
                                 <div className="col-sm-6">
                                     {!project.status?<span className="badge bg-success">Open</span>:<span className="badge bg-danger">Closed</span>}
                                 </div>
-                            </div>
+                            </div> */}
                         
                     </div>
                 </div>

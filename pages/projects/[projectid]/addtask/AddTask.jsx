@@ -135,10 +135,10 @@ export default function AddTask(){
                             <textarea type="text" ref={description} rows={4} className="form-control" />
                         </div>
                     </div>
-                    <div className="form-group row my-3">
+                    {/* <div className="form-group row my-3">
                         <label htmlFor="test cases" className="col-sm-2 col-form-label">Test Cases</label>
                         <TestCase></TestCase>
-                    </div>
+                    </div> */}
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
                         <div className="col-sm-4"><input ref={timelimit} min={0} type="number" placeholder="in hrs" className="form-control"/></div>
