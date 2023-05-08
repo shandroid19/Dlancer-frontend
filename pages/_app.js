@@ -66,7 +66,7 @@ function AppWrapper({ Component, pageProps }) {
       console.log("successfully logged in");
     }).catch((e)=>{
       console.error(e);
-      router.push('/');
+      // router.push('/');
     })
   }
   else if(router.pathname==='/'){

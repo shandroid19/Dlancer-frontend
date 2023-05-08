@@ -1,14 +1,13 @@
 import TaskCard from "./TaskCard"
 import Link from "next/link"
 
-export default function TaskList({tasks,projectid,usermode}){
+export default function TaskList({tasks,projectid,usermode,mode=false}){
     //if usermode is 0 then display request button
     //if usermode is 1 then do not display any button
     //if usermode is 2 then display add task button
-    console.log(tasks)
-    const listed = tasks?.map((task,key)=>{
+    const listed = usermode>0?tasks?.map((task,key)=>{
         return <TaskCard key={key} usermode={usermode} projectid={!projectid?task.projectID:projectid} task={task}/>
-    })
+    }):<></>
     return <><div className="container m-3">
         {!tasks?.length?<p className="text-center py-5">Tasks have not been created yet</p>:listed}
        
@@ -21,11 +20,11 @@ export default function TaskList({tasks,projectid,usermode}){
                         </div>
                     </div>
                 </Link>:
-                usermode==1?
+                usermode==0 && mode?
                 <div className="card shadow">
-                        <div className="card-body text-center bg-primary text-white" data-toggle="modal" data-target="#projectRequestModal">
+                        <button className=" btn text-center btn-primary text-white" data-toggle="modal" data-target="#projectRequestModal">
                             Request to join
-                        </div>
+                        </button>
                     </div>:<></>
                 // usermode==1?<></>:
             //     <a>

@@ -34,13 +34,13 @@ export default function ProjectCard({project}){
                                 </div>
                             </div>
                             <div className='row my-1'>
-                                <div className="col-sm-6">
+                                {/* <div className="col-sm-6">
                                     <b>Skills:</b>
-                                </div>
-                                <div className="col-sm-6" style={{overflowY:'scroll',maxHeight:'6rem'}}>
+                                </div> */}
+                                <div className="col-12" style={{overflowY:'scroll',maxHeight:'6rem'}}>
                 {project?.requiredSkills?.slice(0, 3).map((skill, key) => {
                 return (
-                <span key={key} className="badge bg-secondary">
+                <span key={key} className="badge bg-secondary mx-2">
              {skillsets[skill]}
                  </span>
                     );

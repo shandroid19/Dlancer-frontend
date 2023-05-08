@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = '0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0'
+    const tokenAddress = "0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0"
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -17,8 +17,14 @@ export default function AddTask(){
     const chainId = parseInt(chainIdhex);
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const router = useRouter();
+    const [hidden,setHidden] = useState("");
+    const [visible,setVisible] = useState("");
     const [skills, setSkills] = useState([]);
     const [collaborators,setCollaborators] = useState([]);
+    const testdir = useRef("");
+    const testrunner = useRef("");
+    const testdestfile = useRef("");
+    const installer = useRef("");
 
     useEffect(()=>{
         // router.query.projectid
@@ -32,6 +38,20 @@ export default function AddTask(){
     },[])
 
     const handleSkillAdd = (e) => {
+        const reqObj = {name:taskname.current.value,
+            description:description.current.value,
+            deadline:timelimit.current.value,
+            employer:account,
+            employee:freelancer.current.value,
+            amount:reward.current.value,
+            visible:visible,
+            hidden:hidden,
+            runner:testrunner.current.value,
+            installer:installer.current.value,
+            testdir:testdir.current.value,
+            testdestfile:testdestfile.current.value
+        }
+        console.log(reqObj)
         const selectedSkill = e.target.value;
         if (!skills.includes(selectedSkill)) {
           setSkills([...skills, selectedSkill]);
@@ -39,12 +59,25 @@ export default function AddTask(){
       }
       
     const handleSkillRemove = (skill) => {
+        
         setSkills(skills.filter((s) => s !== skill))
       }
 
 
         const onActivate = async ()=>{
-            const reqObj = {name:taskname.current.value,description:description.current.value,deadline:timelimit.current.value,employer:account,employee:freelancer.current.value,amount:reward.current.value}
+            const reqObj = {name:taskname.current.value,
+                description:description.current.value,
+                deadline:timelimit.current.value,
+                employer:account,
+                employee:freelancer.current.value,
+                amount:reward.current.value,
+                visible:visible,
+                hidden:hidden,
+                runner:testrunner.current.value,
+                installer:installer.current.value,
+                testdir:testdir.current.value,
+                testdestfile:testdestfile.current.value
+            }
             console.log(reqObj)
 
         
@@ -63,9 +96,11 @@ export default function AddTask(){
                 //after deploying the contract on the backend, execute below functions using contractAddress obtained from serverside
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
+                console.log(contractAddress)
                 const taskContract = new ethers.Contract(contractAddress, abi, signer);
                 const tokenContract = new ethers.Contract(tokenAddress, BUSDabi, signer);
 
+                console.log("signer: \n",signer)
                 
                 // await tokenContract.mint(account, ethers.utils.parseUnits(reward.current.value.toString()));
                 console.log(typeof reqObj.amount)
@@ -78,9 +113,13 @@ export default function AddTask(){
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,requiredSkills:skills})
+                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,
+                    requiredSkills:skills, 
+                    hiddenTests: hidden, visibleTests: visible, depInstaller: installer.current.value, testDest: testdir.current.value, testDestFile: testdestfile.current.value,
+                    runner:testrunner.current.value
+                })
                 }).then((res)=>{
-                    if(res.status!=200) throw new Error("could not activate task")
+                    if(res.status!=200) throw new Error("could not activate task");
                     return res.json();
                 }).then((res)=>{
                     console.log("Task successfully created");
@@ -97,6 +136,36 @@ export default function AddTask(){
             })
        
         }
+
+
+        function handleFileSelectVisible(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+                reader.readAsText(file);
+                reader.onload = function(event) {
+                  const fileContent = event.target.result;
+                  // Do something with the file content, such as storing it in a string variable
+                  console.log(fileContent);
+                  setVisible(fileContent)
+                };
+                const label = document.querySelector('.visiblelabel');
+                label.textContent = file.name;
+        }
+
+        function handleFileSelectHidden(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = function(event) {
+              const fileContent = event.target.result;
+              // Do something with the file content, such as storing it in a string variable
+              console.log(fileContent);
+                setHidden(fileContent);
+            };
+            const label = document.querySelector('.hiddenlabel');
+            label.textContent = file.name;
+          }
+        
    
 
     const TestCase = ()=>{
@@ -118,7 +187,7 @@ export default function AddTask(){
     return (
         <div className="container p-5">
         <div className="card">
-            <div className="card-header">
+            <div className="card-header bg1">
                 <div className="display-6 text-center">Create a Task</div>
             </div>
             <div className="card-body">
@@ -126,19 +195,70 @@ export default function AddTask(){
                     <div className="form-group row my-3">
                         <label htmlFor="title" className="col-sm-2 col-form-label">Task name</label>
                         <div className="col-sm-10">
-                            <input ref={taskname} type="text" className="form-control" />
+                            <input ref={taskname} type="text" className="form-control" placeholder="Enter task title" />
                         </div>
                     </div>
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Description</label>
                         <div className="col-sm-10">
-                            <textarea type="text" ref={description} rows={4} className="form-control" />
+                            <textarea type="text" ref={description} rows={4} className="form-control" placeholder="Enter the task description" />
                         </div>
                     </div>
-                    {/* <div className="form-group row my-3">
-                        <label htmlFor="test cases" className="col-sm-2 col-form-label">Test Cases</label>
-                        <TestCase></TestCase>
-                    </div> */}
+
+                    <div className="form-group row my-3">
+                        <label htmlFor="description" className="col-sm-2 col-form-label">Path to Embedded Testcases</label>
+                        <div className="col-sm-10">
+                        <input type="text" ref={testdir} placeholder="enter the path to tests directory relative to project directory" className="form-control" />
+                        </div>
+                    </div>
+
+                    <div className="form-group row my-3">
+                        <label htmlFor="description" className="col-sm-2 col-form-label">File to Embedded Testcases</label>
+                        <div className="col-sm-10">
+                        <input type="text" ref={testdestfile} placeholder="File name to embedded the tests, Your tests will be placed here after task completion" className="form-control" />
+                        </div>
+                    </div>
+
+                    <div className="form-group row my-3">
+                        <label htmlFor="description" className="col-sm-2 col-form-label">Dependancy installer command</label>
+                        <div className="col-sm-10">
+                            <input type="text" ref={installer} placeholder="enter the command for installing dependancies" className="form-control" />
+                        </div>
+                    </div>
+
+                    <div className="form-group row my-3">
+                        <label htmlFor="description" className="col-sm-2 col-form-label">Test Runner command</label>
+                        <div className="col-sm-10">
+                            <input type="text" ref={testrunner} placeholder="enter the command to run testing (Eg. npm test)" className="form-control" />
+                        </div>
+                    </div>
+
+                    <div className="form-group row my-3">
+                        <label htmlFor="test cases" className="col-sm-2 col-form-label">Tests</label>
+                        <div className="col-sm-10">
+                     <div className="form-group row my-3">
+                            <label htmlFor="title" className="col-sm-1 col-form-label">Visible</label>
+                                <div className="col-sm-5">
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" onChange={handleFileSelectVisible} class="custom-file-input" id="visibleTest" name="fileUploadHidden"/>
+                                        <label class="custom-file-label visiblelabel" for="fileUploadVisible">Choose file</label>
+                                     </div>
+                                </div>
+                                </div>
+                            <label htmlFor="title" className="col-sm-1 col-form-label">Hidden</label>
+                                <div className="col-sm-5">
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <input type="file" onChange={handleFileSelectHidden} class="custom-file-input" id="hiddenTest" name="fileUploadHidden"/>
+                                        <label class="custom-file-label hiddenlabel" for="fileUploadHidden">Choose file</label>
+                                     </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
                         <div className="col-sm-4"><input ref={timelimit} min={0} type="number" placeholder="in hrs" className="form-control"/></div>

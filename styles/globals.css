@@ -24,7 +24,8 @@ a{
 }
 
 .bg1{
-  background-color: #4257f5;
+  background-color: #4257f5 !important;
+  color: white !important;
 }
 
 .bg2{

@@ -15,6 +15,8 @@ export default function Signup() {
   const [emailError, setEmailError] = useState(true);
   const [usernameError, setUsernameError] = useState(true);
   const [title,setTitle] = useState('');
+  const [gitprofile,setGitprofile] = useState('');
+  const [gitError,setGitError] = useState(true);
   const [org,setOrg] = useState('');
   const [loading,setLoading] = useState(false)
   const [link,setLink] = useState('');
@@ -94,6 +96,15 @@ export default function Signup() {
     }
   }
 
+  const validateGitProfile = (e)=>{
+    setGitprofile(e.target.value)
+    if (!e.target.value) {
+      setGitError(true);
+    } else {
+      setGitError(false);
+    }
+  }
+
 
   const handleImageClick = () => {
     const input = document.createElement('input');
@@ -142,6 +153,7 @@ export default function Signup() {
     bio,
     image,
     skills,
+    // ghUserName:gitprofile,
     certificates: certificates.map(cert => ({
       title: cert.title,
       org: cert.organization,
@@ -208,6 +220,20 @@ export default function Signup() {
                     <div className="col-md-12 my-3"><label className="labels">Bio</label>
                     <textarea rows={3} className="form-control" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Enter Bio" />
                     </div>
+                    <div className="row mt-2">
+                    <div className="col-md-12"><label className="labels">Github Username</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="gitProfile"
+                      placeholder="Enter Github Profile username"
+                      value={gitprofile}
+                      onChange={validateGitProfile}
+                      required
+                 />
+                  {gitError?<div className="text-danger" >Github username cannot be blank</div>:<></>}
+                    </div>
+                </div>
                 </div>
                 
                 <div className="mt-5 text-center"><button onClick={handleSignup} className="btn btn-primary profile-button" type="button">Save Profile</button></div>

@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import { useEffect, useRef, useState } from "react";
-import { useERC20Balances, useMoralis,useWeb3Contract } from "react-moralis";
+import {  useMoralis,useWeb3Contract } from "react-moralis";
 import { abi,addresses,BUSDabi } from "@/constants";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
@@ -11,7 +11,7 @@ export default function SubmitWork(){
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const {account} = useMoralis();
     const router= useRouter();
-    const tokenAddress = '0x21E0F5d54E45CE43f465a19AA3668F03be118CfC'
+    const tokenAddress = '0x924E039a029c9072E99387Ac30df3149b228c3F5'
     const params = router.query;
     const [task,setTask] = useState({});
     const [conaddr,setConaddr] = useState('0x0');
@@ -88,6 +88,7 @@ export default function SubmitWork(){
                 completed:arraydata[6]    
                 };
             // console.log((resObj.deadline-Math.floor(Date.now() / 1000))>0 && !resObj.cancelled && !resObj.completed)
+            console.log(resObj)
             setActive((resObj.deadline-Math.floor(Date.now() / 1000))>0 && !resObj.cancelled && !resObj.completed)
             setTask(resObj);
             });
@@ -101,18 +102,19 @@ export default function SubmitWork(){
     },[conaddr]);
 
     
-
     const submit = async ()=>{
-        fetch('http://localhost:5000/api/tasks/complete/'+router.query.taskid,{
+        fetch('http://localhost:5000/api/chatgpt/complete/'+router.query.taskid,{
             method:"POST",
             headers:{
                 "Content-type":"application/json"
             },
-            body:JSON.stringify({address:conaddr})
+            body:JSON.stringify({address:conaddr,code:code.current.value,description:task.description})
         }).then((res)=>{
             if(!res.ok) throw new Error(res.json());
+            window.location.reload();
             return res.json();
         }).then((res)=>console.log(res)).catch((e)=>{
+            alert("The submitted code did not pass the criteria");
             console.error(e)
         })
         // try{
@@ -126,6 +128,30 @@ export default function SubmitWork(){
         //     console.log(e)
         // }
     }
+    // const submit = async ()=>{
+    //     fetch('http://localhost:5000/api/tasks/complete/'+router.query.taskid,{
+    //         method:"POST",
+    //         headers:{
+    //             "Content-type":"application/json"
+    //         },
+    //         body:JSON.stringify({address:conaddr})
+    //     }).then((res)=>{
+    //         if(!res.ok) throw new Error(res.json());
+    //         return res.json();
+    //     }).then((res)=>{if(res) window.location.reload()}).catch((e)=>{
+    //         console.error(e)
+    //     })
+    //     // try{
+    //     //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+    //     //     const signer = provider.getSigner();
+    //     //     const taskContract = new ethers.Contract(conaddr, abi, signer);
+    //     //     const tx = await taskContract.completeTask();
+    //     //     tx.wait(1);
+    //     //     console.log(await taskContract.isCompleted());
+    //     // } catch(e){
+    //     //     console.log(e)
+    //     // }
+    // }
 
     const handleDelete = ()=>{
         fetch('http://localhost:5000/api/tasks/'+router.query.projectid+'?taskid='+router.query.taskid,{method:'DELETE'}).then((res)=>{
@@ -199,6 +225,14 @@ export default function SubmitWork(){
                 </div>
                 <div className="row my-3">
                     <div className="col-sm-3 ">
+                        <b>Task ID:</b>
+                    </div>
+                    <div className="col-sm-9 ">
+                        {router.query.taskid}
+                    </div>
+                </div>
+                <div className="row my-3">
+                    <div className="col-sm-3 ">
                         <b>Description:</b>
                     </div>
                     <div className="col-sm-9 ">
@@ -222,8 +256,15 @@ export default function SubmitWork(){
                         {task.reward} USD
                     </div>
                 </div>
-                
-               
+                {active?<div className="row my-3">
+                     <div className="col-sm-3 ">
+                        <b> Your code:</b>
+                     </div>
+                     <div className="col-sm-9">
+                         <textarea className="form-control" ref={code} rows={6}/>
+                     </div>
+                 </div>:<></>}
+                {task.completed?<span className="bg-success badge">Completed</span>:<></>}
                 {active?
                 <div className="row">
                 <div className="col-lg-1 col-md-2 col-sm-3">

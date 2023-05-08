@@ -18,24 +18,22 @@ export default function Project(){
     //         {id:3,title:"code",description:"code ",testcases:"testcases",reward:7,deadline:8},
     //     ]
     // }
-
     useEffect(()=>{
         fetch("http://localhost:5000/api/projects/"+router.query.projectid).then((res)=>{
         if(res.status!=200) throw new Error(res.json().message);
             return res.json();
         }).then((res)=>{
-            console.log(res)
             setProject(res)
             if(res.ownerID.walletID===account)
                 setusermode(2);
-            else if(account.includes(res.collaborators))
+            else if(res.collaborators.some(collaborator => collaborator.walletID === account))
                 setusermode(1);
             else    
                 setusermode(0);
         })
         .catch((e)=>console.log(e.message))
     },[])
-
+    console.log(usermode)
     const request = ()=>{
         fetch('http://localhost:5000/api/req',{
                 method:'POST',
@@ -56,7 +54,7 @@ export default function Project(){
     <div className="modal-dialog" role="document">
     <div className="modal-content">
       <div className="modal-header">
-        <h5 className="modal-title" > Collaboration Request</h5>
+        <h5 className="modal-title">Collaboration Request</h5>
         <button type="button" className="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -75,7 +73,7 @@ export default function Project(){
 
     <div className="container p-5">
     <div className="card shadow text-dark my-5">
-    <div className="card-header display-6 text-center">
+    <div className="card-header display-6 text-center bg1">
         {project.projectName}
     </div>
     <div className="card-body">
@@ -97,11 +95,11 @@ export default function Project(){
                     {project.collaborators?.length }
                 </div>
             </div>
-            <div className="row d-flex justify-content-center">
+            {usermode==1?<div className="row d-flex justify-content-center">
                 <h3 className="d-flex justify-content-center">Tasks</h3>
-            </div>
+            </div>:<></>}
             <div className="row d-flex justify-content-center">
-                <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid}/>
+                <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid} mode={true}/>
             </div>
             {/* <div className="row d-flex justify-content-center">
                 <div className="col d-flex justify-content-center">

@@ -29,8 +29,8 @@ export default function CreateProject(){
             body:JSON.stringify({
                 projName:name.current.value,
                 description:description.current.value,
-                // repo:repo.current.value,
-                // branch:branch.current.value,
+                repo:repo.current.value,
+                branch:branch.current.value,
                 skills:skills
             })
         }).then((res)=>{
@@ -67,7 +67,7 @@ export default function CreateProject(){
 
         <div className="container p-5">
             <div className="card shadow">
-            <div className="card-header text-center display-6">
+            <div className="card-header bg1 text-center display-6">
                         Create a project
                     </div>
                 <div className="card-body">
