@@ -357,7 +357,7 @@ const displayprofile = <div className='container mt-5'>
           {data.email}
         </div>
       </div>
-      <hr/>
+      {/* <hr/>
       <div className="row">
         <div className="col-sm-3">
           <h6 className="mb-0">Github</h6>
@@ -365,7 +365,7 @@ const displayprofile = <div className='container mt-5'>
         <div className="col-sm-9 text-secondary">
           {data.gitprofile}
         </div>
-      </div>
+      </div> */}
       <hr/>
       <div className="row">
         <div className="col-sm-3">

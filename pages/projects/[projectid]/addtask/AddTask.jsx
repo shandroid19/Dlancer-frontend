@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = '0x924E039a029c9072E99387Ac30df3149b228c3F5'
+    const tokenAddress = "0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0"
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -113,7 +113,8 @@ export default function AddTask(){
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,requiredSkills:skills, 
+                body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,
+                    requiredSkills:skills, 
                     hiddenTests: hidden, visibleTests: visible, depInstaller: installer.current.value, testDest: testdir.current.value, testDestFile: testdestfile.current.value,
                     runner:testrunner.current.value
                 })
@@ -234,7 +235,6 @@ export default function AddTask(){
 
                     <div className="form-group row my-3">
                         <label htmlFor="test cases" className="col-sm-2 col-form-label">Tests</label>
-                        {/* <TestCase></TestCase> */}
                         <div className="col-sm-10">
                      <div className="form-group row my-3">
                             <label htmlFor="title" className="col-sm-1 col-form-label">Visible</label>
@@ -258,6 +258,7 @@ export default function AddTask(){
                             </div>
                         </div>
                     </div>
+
                     <div className="form-group row my-3">
                         <label htmlFor="time-limit" className="col-sm-2 col-form-label">Time limit</label>
                         <div className="col-sm-4"><input ref={timelimit} min={0} type="number" placeholder="in hrs" className="form-control"/></div>

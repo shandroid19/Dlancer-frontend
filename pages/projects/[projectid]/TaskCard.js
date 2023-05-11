@@ -11,6 +11,31 @@ export default function TaskCard({task,projectid,usermode}){
     const [data, setData] = useState(null);
     const {chainId:chainIdhex,isWeb3Enabled} = useMoralis();
     const chainId = parseInt(chainIdhex);
+    const [fileContent, setFileContent] = useState('');
+
+  const handleDownload = async () => {
+    if (data.completed) {
+      fetch(`http://localhost:5000/api/projects/gettask/${task._id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(res.json().message);
+        return res.json();
+      })
+      .then((taskdata) => {
+        setFileContent(taskdata.code);
+        const element = document.createElement('a');
+      const file = new Blob([taskdata.code], {type: 'text/plain'});
+      element.href = URL.createObjectURL(file);
+      element.download = `${task.taskName}.txt`;
+      document.body.appendChild(element);
+      element.click();
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+      
+      
+    }
+  };    
     const {runContractFunction:getValues} = useWeb3Contract(
         {
             abi:abi,
@@ -103,6 +128,8 @@ export default function TaskCard({task,projectid,usermode}){
                     <div className="col-sm-6 col-md-2">
                         {task.freelancer.slice(0,6)}...{task.freelancer.slice(task.freelancer.length-4)}
                     </div>
+                   
+
              
                         {usermode==2?
                             <div className="col-sm-6 col-md-4 d-flex flex-row-reverse">
@@ -159,7 +186,9 @@ export default function TaskCard({task,projectid,usermode}){
                     {(data?.deadline-Math.floor(Date.now() / 1000))>0?formatTime(data?.deadline-Math.floor(Date.now() / 1000)):"Exceeded"}
                 </div>
             </div>
+            {data?.completed? <button className="btn btn-sm btn-primary d-block my-1" onClick={handleDownload}>Download code</button>:<></>}
             {data?.completed?<span className="badge bg-success">Completed</span>:<></>}
+            {data?.completed?<></>:<></>}
             {(data?.deadline-Math.floor(Date.now() / 1000))<0 && !data?.cancelled?
             <div className="row d-flex flex-row-reverse d-flex mt-2">
                 <div className="col">

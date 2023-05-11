@@ -95,11 +95,11 @@ export default function Project(){
                     {project.collaborators?.length }
                 </div>
             </div>
-            {usermode>0?<div className="row d-flex justify-content-center">
+            {usermode==1?<div className="row d-flex justify-content-center">
                 <h3 className="d-flex justify-content-center">Tasks</h3>
             </div>:<></>}
             <div className="row d-flex justify-content-center">
-                <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid}/>
+                <TaskList tasks={project.tasks} usermode={usermode} projectid={router.query.projectid} mode={true}/>
             </div>
             {/* <div className="row d-flex justify-content-center">
                 <div className="col d-flex justify-content-center">

@@ -1,7 +1,7 @@
 import TaskCard from "./TaskCard"
 import Link from "next/link"
 
-export default function TaskList({tasks,projectid,usermode}){
+export default function TaskList({tasks,projectid,usermode,mode=false}){
     //if usermode is 0 then display request button
     //if usermode is 1 then do not display any button
     //if usermode is 2 then display add task button
@@ -20,7 +20,7 @@ export default function TaskList({tasks,projectid,usermode}){
                         </div>
                     </div>
                 </Link>:
-                usermode==0?
+                usermode==0 && mode?
                 <div className="card shadow">
                         <button className=" btn text-center btn-primary text-white" data-toggle="modal" data-target="#projectRequestModal">
                             Request to join
