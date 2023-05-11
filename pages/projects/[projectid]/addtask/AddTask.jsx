@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = "0xeedeBa68B9B74aE10B014c90ccc47D211AC698B0"
+    const tokenAddress = "0xa622198f15C75e4A3C132138CF2Ab4Fb24c1dF33"
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
