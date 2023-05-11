@@ -153,7 +153,7 @@ export default function Signup() {
     bio,
     image,
     skills,
-    // ghUserName:gitprofile,
+    ghUserName:gitprofile,
     certificates: certificates.map(cert => ({
       title: cert.title,
       org: cert.organization,
