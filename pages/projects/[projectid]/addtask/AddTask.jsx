@@ -109,6 +109,8 @@ export default function AddTask(){
                 // console.log(tx)
                 // const result = await taskContract.isActivated();
                 // console.log(result)
+                const temp = testrunner.current.value;
+                const runner = temp.split(" ")[0];
 
                 fetch('http://localhost:5000/api/tasks/'+router.query.projectid,{
                 method:'POST',
@@ -116,7 +118,7 @@ export default function AddTask(){
                 body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,
                     requiredSkills:skills, 
                     hiddenTests: hidden, visibleTests: visible, depInstaller: installer.current.value, testDest: testdir.current.value, testDestFile: testdestfile.current.value,
-                    runner:testrunner.current.value
+                    runner:runner
                 })
                 }).then((res)=>{
                     if(res.status!=200) throw new Error("could not activate task");
@@ -208,7 +210,7 @@ export default function AddTask(){
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Path to Embedded Testcases</label>
                         <div className="col-sm-10">
-                        <input type="text" ref={testdir} placeholder="enter the path to tests directory relative to project directory" className="form-control" />
+                        <input type="text" ref={testdir} placeholder="Enter the path to tests directory relative to project directory (end with '/')" className="form-control" />
                         </div>
                     </div>
 
@@ -222,14 +224,14 @@ export default function AddTask(){
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Dependancy installer command</label>
                         <div className="col-sm-10">
-                            <input type="text" ref={installer} placeholder="enter the command for installing dependancies" className="form-control" />
+                            <input type="text" ref={installer} placeholder="Enter the command for installing dependencies" className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group row my-3">
-                        <label htmlFor="description" className="col-sm-2 col-form-label">Test Runner command</label>
+                        <label htmlFor="description" className="col-sm-2 col-form-label">Test Runner</label>
                         <div className="col-sm-10">
-                            <input type="text" ref={testrunner} placeholder="enter the command to run testing (Eg. npm test)" className="form-control" />
+                            <input type="text" ref={testrunner} placeholder="Enter the command to run testing (Eg. jest)(Single word)" className="form-control" />
                         </div>
                     </div>
 
