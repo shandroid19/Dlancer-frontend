@@ -363,7 +363,7 @@ const displayprofile = <div className='container mt-5'>
           <h6 className="mb-0">Github</h6>
         </div>
         <div className="col-sm-9 text-secondary">
-          {data.gitprofile}
+          {data.ghUserName}
         </div>
       </div> */}
       <hr/>
