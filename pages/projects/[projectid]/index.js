@@ -95,6 +95,14 @@ export default function Project(){
                     {project.collaborators?.length }
                 </div>
             </div>
+            <div className="row my-3">
+                <div className="col-sm-3 ">
+                    <b>Github Repository:</b>
+                </div>
+                <div className="col-sm-9 ">
+                    {project.githubRepo }
+                </div>
+            </div>
             {usermode==1?<div className="row d-flex justify-content-center">
                 <h3 className="d-flex justify-content-center">Tasks</h3>
             </div>:<></>}

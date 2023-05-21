@@ -186,10 +186,10 @@ export default function TaskCard({task,projectid,usermode}){
                     {(data?.deadline-Math.floor(Date.now() / 1000))>0?formatTime(data?.deadline-Math.floor(Date.now() / 1000)):"Exceeded"}
                 </div>
             </div>
-            {data?.completed? <button className="btn btn-sm btn-primary d-block my-1" onClick={handleDownload}>Download code</button>:<></>}
+            {(data?.completed && task.auto)? <button className="btn btn-sm btn-primary d-block my-1" onClick={handleDownload}>Download code</button>:<></>}
             {data?.completed?<span className="badge bg-success">Completed</span>:<></>}
             {data?.completed?<></>:<></>}
-            {(data?.deadline-Math.floor(Date.now() / 1000))<0 && !data?.cancelled?
+            {(data?.deadline-Math.floor(Date.now() / 1000))<0 && !data?.cancelled && !data.completed?
             <div className="row d-flex flex-row-reverse d-flex mt-2">
                 <div className="col">
                     <button className="btn btn-primary btn-sm" data-dismiss="modal" onClick={handleRefund}>

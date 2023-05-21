@@ -268,9 +268,15 @@ export default function SubmitWork(){
                 {task.completed?<span className="bg-success badge">Completed</span>:<></>}
                 {active?
                 <div className="row">
+                
                 {auto?<div className="col-lg-1 col-md-2 col-sm-3">
                     <button className="btn btn-primary" onClick={submit}>Submit task</button>
-                </div> :<></>}
+                </div> :
+                <div className="col-12">
+                    <p>Submit a pull request to the project repository to make your contribution. The pull request must be appended with "<b> ;{router.query.taskid} </b>"</p>
+                </div>
+                }
+                
                 <div className="col-lg-1 col-md-2 col-sm-3">
                     <button className="btn btn-danger" data-toggle="modal" data-target="#cancelModal">Cancel task</button>
                 </div>

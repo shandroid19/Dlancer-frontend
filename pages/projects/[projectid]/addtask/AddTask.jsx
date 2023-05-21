@@ -118,7 +118,7 @@ export default function AddTask(){
                 body:JSON.stringify({contractAddress:contractAddress,name:taskname.current.value,employee:freelancer.current.value,
                     requiredSkills:skills, 
                     hiddenTests: hidden, visibleTests: visible, depInstaller: installer.current.value, testDest: testdir.current.value, testDestFile: testdestfile.current.value,
-                    runner:runner
+                    runner:runner,auto:auto
                 })
                 }).then((res)=>{
                     if(res.status!=200) throw new Error("could not activate task");
@@ -215,7 +215,7 @@ export default function AddTask(){
                             </div>
                         </div>
                     </div>
-                    
+                    {console.log(auto)}
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Path to Embedded Testcases</label>
                         <div className="col-sm-10">
