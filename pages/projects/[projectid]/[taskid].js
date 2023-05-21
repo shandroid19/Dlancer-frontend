@@ -11,11 +11,10 @@ export default function SubmitWork(){
     const contractAddress= addresses[chainId]?addresses[chainId][addresses[chainId].length-1]:null;
     const {account} = useMoralis();
     const router= useRouter();
-    const tokenAddress = '0x924E039a029c9072E99387Ac30df3149b228c3F5'
-    const params = router.query;
     const [task,setTask] = useState({});
     const [conaddr,setConaddr] = useState('0x0');
     const [active,setActive] = useState(true);
+    const [auto,setAuto] = useState(false);
     // const task = {
     //     name:"Todo List",
     //     description:"Develop a todo list which has the following features",
@@ -37,6 +36,7 @@ export default function SubmitWork(){
               return res.json();
             })
             .then((task) => {
+              setAuto(task.auto)
               setConaddr(task.contractAddress)
             })
             .catch((e) => {
@@ -239,6 +239,7 @@ export default function SubmitWork(){
                         {task.description} 
                     </div>
                 </div>
+                
                 <div className="row my-3">
                     <div className="col-sm-3 ">
                         <b>Remaining time:</b>
@@ -256,7 +257,7 @@ export default function SubmitWork(){
                         {task.reward} USD
                     </div>
                 </div>
-                {active?<div className="row my-3">
+                {active && auto?<div className="row my-3">
                      <div className="col-sm-3 ">
                         <b> Your code:</b>
                      </div>
@@ -267,9 +268,9 @@ export default function SubmitWork(){
                 {task.completed?<span className="bg-success badge">Completed</span>:<></>}
                 {active?
                 <div className="row">
-                <div className="col-lg-1 col-md-2 col-sm-3">
+                {auto?<div className="col-lg-1 col-md-2 col-sm-3">
                     <button className="btn btn-primary" onClick={submit}>Submit task</button>
-                </div>
+                </div> :<></>}
                 <div className="col-lg-1 col-md-2 col-sm-3">
                     <button className="btn btn-danger" data-toggle="modal" data-target="#cancelModal">Cancel task</button>
                 </div>

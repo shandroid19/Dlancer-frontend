@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { skillsets } from "@/constants";
 export default function AddTask(){
-    const tokenAddress = "0xa622198f15C75e4A3C132138CF2Ab4Fb24c1dF33"
+    const tokenAddress = "0x481cbfa4784DF9d85f51022640370fC93D80D869"
     const {account} = useMoralis();
     const taskname = useRef("");
     const description = useRef("");
@@ -21,6 +21,7 @@ export default function AddTask(){
     const [visible,setVisible] = useState("");
     const [skills, setSkills] = useState([]);
     const [collaborators,setCollaborators] = useState([]);
+    const [auto,setAuto] = useState(false);
     const testdir = useRef("");
     const testrunner = useRef("");
     const testdestfile = useRef("");
@@ -76,7 +77,8 @@ export default function AddTask(){
                 runner:testrunner.current.value,
                 installer:installer.current.value,
                 testdir:testdir.current.value,
-                testdestfile:testdestfile.current.value
+                testdestfile:testdestfile.current.value,
+                auto:auto,
             }
             console.log(reqObj)
 
@@ -106,9 +108,7 @@ export default function AddTask(){
                 console.log(typeof reqObj.amount)
                 const approveTx = await tokenContract.connect(signer).approve(contractAddress,ethers.utils.parseUnits("5000"));
                 const tx = await taskContract.activateTask();
-                // console.log(tx)
-                // const result = await taskContract.isActivated();
-                // console.log(result)
+              
                 const temp = testrunner.current.value;
                 const runner = temp.split(" ")[0];
 
@@ -206,32 +206,41 @@ export default function AddTask(){
                             <textarea type="text" ref={description} rows={4} className="form-control" placeholder="Enter the task description" />
                         </div>
                     </div>
-
+                    <div className="form-group row my-3">
+                        <label htmlFor="auto" className="col-sm-2 col-form-label">Testing mode</label>
+                        <div className="col-sm-10 d-flex align-items-center">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" onChange={()=>{setAuto(!auto);}} type="checkbox" role="switch" id="flexSwitchCheckDefault"/>
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Automatic</label>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Path to Embedded Testcases</label>
                         <div className="col-sm-10">
-                        <input type="text" ref={testdir} placeholder="Enter the path to tests directory relative to project directory (end with '/')" className="form-control" />
+                        <input type="text" disabled={auto} ref={testdir} placeholder="Enter the path to tests directory relative to project directory (end with '/')" className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">File to Embedded Testcases</label>
                         <div className="col-sm-10">
-                        <input type="text" ref={testdestfile} placeholder="File name to embedded the tests, Your tests will be placed here after task completion" className="form-control" />
+                        <input type="text" disabled={auto} ref={testdestfile} placeholder="File name to embedded the tests, Your tests will be placed here after task completion" className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Dependancy installer command</label>
                         <div className="col-sm-10">
-                            <input type="text" ref={installer} placeholder="Enter the command for installing dependencies" className="form-control" />
+                            <input type="text" disabled={auto} ref={installer} placeholder="Enter the command for installing dependencies" className="form-control" />
                         </div>
                     </div>
 
                     <div className="form-group row my-3">
                         <label htmlFor="description" className="col-sm-2 col-form-label">Test Runner</label>
                         <div className="col-sm-10">
-                            <input type="text" ref={testrunner} placeholder="Enter the command to run testing (Eg. jest)(Single word)" className="form-control" />
+                            <input type="text" disabled={auto} ref={testrunner} placeholder="Enter the command to run testing (Eg. jest)(Single word)" className="form-control" />
                         </div>
                     </div>
 
@@ -243,7 +252,7 @@ export default function AddTask(){
                                 <div className="col-sm-5">
                                 <div class="form-group">
                                     <div class="custom-file">
-                                        <input type="file" onChange={handleFileSelectVisible} class="custom-file-input" id="visibleTest" name="fileUploadHidden"/>
+                                        <input disabled={auto} type="file" onChange={handleFileSelectVisible} class="custom-file-input" id="visibleTest" name="fileUploadHidden"/>
                                         <label class="custom-file-label visiblelabel" for="fileUploadVisible">Choose file</label>
                                      </div>
                                 </div>
@@ -252,7 +261,7 @@ export default function AddTask(){
                                 <div className="col-sm-5">
                                 <div class="form-group">
                                     <div class="custom-file">
-                                        <input type="file" onChange={handleFileSelectHidden} class="custom-file-input" id="hiddenTest" name="fileUploadHidden"/>
+                                        <input disabled={auto} type="file" onChange={handleFileSelectHidden} class="custom-file-input" id="hiddenTest" name="fileUploadHidden"/>
                                         <label class="custom-file-label hiddenlabel" for="fileUploadHidden">Choose file</label>
                                      </div>
                                 </div>
