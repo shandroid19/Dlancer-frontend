@@ -59,13 +59,13 @@ export default function ProjectsPage(){
                 </div>
                 </div>
             </div>
-            <div className="row d-flex justify-content-center my-5">
+            {/* <div className="row d-flex justify-content-center my-5">
                 <div className="col-sm-6 d-flex justify-content-center"><h3>Assigned tasks</h3></div>
-            </div>
-            <div className="container p-5 bg-light">
-                {/* <ProjectList data={otherProjects} mode={false}/> */}
+            </div> */}
+            {/* <ProjectList data={otherProjects} mode={false}/> */}
+            {/* <div className="container p-5 bg-light">
                 <TaskList tasks={otherProjects} usermode={0} projectid={null}/>
-            </div>
+            </div> */}
         </div>
         
     </>

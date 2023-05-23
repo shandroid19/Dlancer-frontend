@@ -48,7 +48,7 @@ export default function Requests(){
         const project = _doc.project.projectName;
         const userid = _doc.user;
         const requestid = _doc._id
-        return <div className="row d-flex align-items-center ">
+        return <div className="row d-flex align-items-center">
             <div className="col-sm-8">
             <Link href = {mode?`/projects/${project}`:`/users/${userid}`}>
                 <div className="card-body text-center">
@@ -73,7 +73,7 @@ export default function Requests(){
     return <><Header/>
         <div className="container p-5">
             <div className="row d-flex justify-content-center">
-            <div className="col-sm-6">
+            <div className=" col-md-10 col-lg-8">
             <div  className="card">
                 <div className="card-header bg1">
                     Requests

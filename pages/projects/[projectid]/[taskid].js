@@ -15,6 +15,7 @@ export default function SubmitWork(){
     const [conaddr,setConaddr] = useState('0x0');
     const [active,setActive] = useState(true);
     const [auto,setAuto] = useState(false);
+    const [visible,setVisible] = useState("")
     // const task = {
     //     name:"Todo List",
     //     description:"Develop a todo list which has the following features",
@@ -38,13 +39,13 @@ export default function SubmitWork(){
             .then((task) => {
               setAuto(task.auto)
               setConaddr(task.contractAddress)
+              setVisible(task.testIntegration.visibleTests)
             })
             .catch((e) => {
               console.error(e)
             })
         }
       }, [router.query.taskid])
-    
     var {runContractFunction:getValues} = useWeb3Contract(
         {
             abi:abi,
@@ -88,7 +89,6 @@ export default function SubmitWork(){
                 completed:arraydata[6]    
                 };
             // console.log((resObj.deadline-Math.floor(Date.now() / 1000))>0 && !resObj.cancelled && !resObj.completed)
-            console.log(resObj)
             setActive((resObj.deadline-Math.floor(Date.now() / 1000))>0 && !resObj.cancelled && !resObj.completed)
             setTask(resObj);
             });
@@ -209,7 +209,6 @@ export default function SubmitWork(){
     //         </div>
     //     </div>
     // })
-
     return<>
     <Header/>
     <div  className="card text-dark my-5">
@@ -257,6 +256,14 @@ export default function SubmitWork(){
                         {task.reward} USD
                     </div>
                 </div>
+                {auto?<></>:<div className="row my-3">
+                    <div className="col-sm-3 ">
+                       <b> Visible Tests:</b>
+                    </div>
+                    <div className="col-sm-9" style={{maxHeight:"30vh",overflowY:'scroll',whiteSpace:'pre-wrap'}}>
+                        {visible}
+                    </div>
+                </div>}
                 {active && auto?<div className="row my-3">
                      <div className="col-sm-3 ">
                         <b> Your code:</b>

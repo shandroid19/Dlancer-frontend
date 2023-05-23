@@ -8,9 +8,10 @@ export default function TaskList({tasks,projectid,usermode,mode=false}){
     const listed = usermode>0?tasks?.map((task,key)=>{
         return <TaskCard key={key} usermode={usermode} projectid={!projectid?task.projectID:projectid} task={task}/>
     }):<></>
-    return <><div className="container m-3">
+    return <><div className="container m-3" >
+        <div className="row d-flex justify-content-center mb-4" style={{maxHeight:"60vh",overflowY:'scroll'}}>
         {!tasks?.length?<p className="text-center py-5">Tasks have not been created yet</p>:listed}
-       
+       </div>
         <div className="row d-flex justify-content-center">
             <div className="col-sm-3">
                 {usermode==2?<Link href={`/projects/${projectid}/addtask`}>
